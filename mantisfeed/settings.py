@@ -27,13 +27,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'mantisfeed/settings.py'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-
+DEBUG = True
 ALLOWED_HOSTS = [
     "127.0.0.1",
     ".herokuapp.com"
     ]
 
+CSRF_TRUSTED_ORIGINS = ['https://project4-mantisfeed.herokuapp.com']
 
 # Application definition
 

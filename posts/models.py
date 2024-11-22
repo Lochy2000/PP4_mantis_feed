@@ -4,6 +4,8 @@ from django.utils import timezone
 
 # Create your models here.
 
+
+# ----- Post --------
 class Post(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
@@ -29,3 +31,23 @@ class Post(models.Model):
         elif direction == 'down':
             self.upvotes.remove(user)
             self.downvotes.add(user) 
+
+
+# ----- Comments --------
+
+class Comment(models.Model):
+    content = models.TextField()
+    created_at = models.DateTimeField(defauly=timezone.now)
+    update_at = models.DateTimeField(auto_now=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
+    parents = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True, related_name="replies")
+
+    class Meta: 
+        odering = ['-created_at']
+
+    def __str__(self):
+        return f'Comment by {self.author.username} on {self.post.title}'
+    
+    def get_replies(self):
+        return self.replies.all()
