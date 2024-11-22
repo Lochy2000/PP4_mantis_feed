@@ -15,6 +15,7 @@ print("Database URL:", os.environ.get("DATABASE_URL"))
 from pathlib import Path
 if os.path.exists('env.py'):
     import env
+    print("env.py loaded successfully")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
