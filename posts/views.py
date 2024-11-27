@@ -10,6 +10,8 @@ from django.db.models import count
 
 # Create your views here.
 
+#display posts and comments
+
 def post_list(request):
     posts = Post.objects.all().order_by('-created_at')
 
@@ -31,6 +33,7 @@ def post_detail(request, post_id):
         'comments' : comments
     })
 
+#create posts
 @login_required 
 def Post_create(request):
     if request.method == 'POST':
@@ -52,3 +55,30 @@ def Post_create(request):
         except Exception as e:
             messages.error(request, f"Error creating post: {str(e)}")
             return redirct('posts:post_create')
+
+    return render (request, 'post/post_form',{'post':post})
+# update / edit posts
+def post_edit(request, post_id):
+    post = get_object_or_404(Post, id = post_id)
+
+    if request.user != post.author: 
+        messages.error(request, "You can't edit this post.")
+        return redirect('posts:post_detail', post_id = post.id)
+
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        content = reuqest.POST.get('content')
+
+        if nto all([title, content]):
+            messages.error(reques, "Please fill in all fields.")
+        else:
+            try:
+                post.title = title 
+                post.content = content 
+                post.save()
+                messages.success(request, "Post updated successfully")
+                return redirect('posts:post_detail', post_id=post.id)
+            except Exception as e:
+                messages.error(request, f"Error updating post: {str(e)}")
+            
+    return render(request, 'post/post_form.html',{'post':post})
