@@ -10,6 +10,27 @@ from django.db.models import count
 
 # Create your views here.
 
+def post_list(request):
+    posts = Post.objects.all().order_by('-created_at')
+
+    top_posts = Post.objects.annotate(
+        total_score = Count('upvotes') - Count('downvotes')
+    ).order_by('-total_score')[:5]
+
+    return render(request, 'posts/post_list.html',{
+        'posts' : posts,
+        'top_posts' : top_posts
+    })
+
+def post_detail(request, post_id):
+    post = get_object_or_404(Post,id=post_id)
+    comments = post.comments.filter(parents=None)
+
+    return render(request, 'posts/post_detail.html',{
+        'post': post,
+        'comments' : comments
+    })
+
 @login_required 
 def Post_create(request):
     if request.method == 'POST':
@@ -31,15 +52,3 @@ def Post_create(request):
         except Exception as e:
             messages.error(request, f"Error creating post: {str(e)}")
             return redirct('posts:post_create')
-
-def post_list(request):
-    posts = Post.objects.all().order_by('-created_at')
-
-    top_posts = Post.objects.annotate(
-        total_score = Count('upvotes') - Count('downvotes')
-    ).order_by('-total_score')[:5]
-
-    return render(request, 'posts/post_list.html',{
-        'posts' : posts,
-        'top_posts' : top_posts
-    })
