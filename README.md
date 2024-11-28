@@ -30,3 +30,21 @@ My version of a reddit clone using django for my project 4
 - pip install gunicorn - for deployment
 - pip install whitenoise - for static files
 
+
+### Early Testing 
+
+### Admin manual testing
+Ran the server using Python manage.py runserver. If this worked added /admin to url and logged in as superuser. Here I could test creating new users and posts. This early manual testing made sure 
+that the models.py were working correctly. 
+
+#### Creating users 
+![image](https://github.com/user-attachments/assets/1e6612e9-e39b-4f6a-a4a6-d0f30344b03f)
+![image](https://github.com/user-attachments/assets/6e12f180-68db-44ee-b8b1-e5fa503f0a60)
+
+
+#### Creating posts
+![image](https://github.com/user-attachments/assets/d8477367-ea56-4040-bf98-a7fd018f44dd)
+![image](https://github.com/user-attachments/assets/e4677b36-3218-464d-b6cf-30652262f86b)
+
+
+
