@@ -5,8 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonRepsonse
 from django.urls import reverse_lazy, reverse
 from django.contrib import messages 
-from .models import Posts, comment
-from django.db.models import count
+from .models import Post, comment
+from django.db.models import Count
 
 # Create your views here.
 
@@ -42,7 +42,7 @@ def Post_create(request):
 
         if not all ([title.content]):
             messages.error(request,"Please fill in all fields.")
-            return redirct('posts:post_create')
+            return redirect('posts:post_create')
 
         try: 
             post = Post.objects.create(
@@ -50,13 +50,14 @@ def Post_create(request):
                 content=content,
                 author=request.user
             )
-            messges.success(request, "Post created successfully!")
+            messages.success(request, "Post created successfully!")
             return redirect('posts:post_detail', post_id=post.id)
         except Exception as e:
             messages.error(request, f"Error creating post: {str(e)}")
-            return redirct('posts:post_create')
+            return redirect('posts:post_create')
 
     return render (request, 'post/post_form',{'post':post})
+
 # update / edit posts
 def post_edit(request, post_id):
     post = get_object_or_404(Post, id = post_id)
@@ -67,10 +68,10 @@ def post_edit(request, post_id):
 
     if request.method == 'POST':
         title = request.POST.get('title')
-        content = reuqest.POST.get('content')
+        content = request.POST.get('content')
 
-        if nto all([title, content]):
-            messages.error(reques, "Please fill in all fields.")
+        if not all([title, content]):
+            messages.error(request, "Please fill in all fields.")
         else:
             try:
                 post.title = title 
