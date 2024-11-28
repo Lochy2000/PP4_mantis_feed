@@ -83,3 +83,20 @@ def post_edit(request, post_id):
                 messages.error(request, f"Error updating post: {str(e)}")
             
     return render(request, 'post/post_form.html',{'post':post})
+
+#Deleting posts
+
+@login_required
+def post_delete(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+
+    if request.user != post.author:
+        messages.error(request, "You cannot delete this post.")
+        return redirect ('posts:post_detail', post_id=post.id)
+    
+    if request.method == 'Post':
+        post.delete()
+        messages.success(request, "Post succesfully deleted!")
+        return redirect('posts:post_detial', post_id=post.id)
+    
+    return render(request, 'sts/post_confirm_delete.html', {'post' : post})
