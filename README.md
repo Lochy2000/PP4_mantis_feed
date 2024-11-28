@@ -31,7 +31,7 @@ My version of a reddit clone using django for my project 4
 - pip install whitenoise - for static files
 
 
-### Early Testing 
+## Early Testing 
 
 ### Admin manual testing
 Ran the server using Python manage.py runserver. If this worked added /admin to url and logged in as superuser. Here I could test creating new users and posts. This early manual testing made sure 
