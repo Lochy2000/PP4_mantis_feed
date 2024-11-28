@@ -47,4 +47,9 @@ that the models.py were working correctly.
 ![image](https://github.com/user-attachments/assets/e4677b36-3218-464d-b6cf-30652262f86b)
 
 
+#### Testing URL
+Templates still to be created, but can see the path is working as it should
+![image](https://github.com/user-attachments/assets/c10763ff-810a-48f9-9d16-83fe20b5c49c)
+
+
 
