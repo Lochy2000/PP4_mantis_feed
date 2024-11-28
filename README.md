@@ -56,4 +56,11 @@ Created a simple post_list.html to make sure everything is working.
 ![image](https://github.com/user-attachments/assets/db553aea-95f3-4b5e-a4b4-9c907d4b631b)
 
 
+## Creating the HTML and CSS
+I had an idea what i wanted to the page to look like. Which I build as a simple web page with css and html. 
+
+![image](https://github.com/user-attachments/assets/d37dbb95-3777-47d4-a78a-586321029c61)
+
+
+
 
