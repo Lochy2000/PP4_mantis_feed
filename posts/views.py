@@ -14,6 +14,8 @@ from django.db.models import Count
 
 def post_list(request):
     posts = Post.objects.all().order_by('-created_at')
+    print("number of posts:", posts.count())
+    print("Posts:", [p.title for p in posts])
 
     top_posts = Post.objects.annotate(
         total_score = Count('upvotes') - Count('downvotes')
