@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import listView, DetailView, CreateView,UpdateView, DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTextMixin
+from django.views.generic import ListView, DetailView, CreateView,UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
-from django.http import JsonRepsonse
+from django.http import JsonResponse
 from django.urls import reverse_lazy, reverse
 from django.contrib import messages 
 from .models import Post, Comment
@@ -35,7 +35,7 @@ def post_detail(request, post_id):
 
 #create posts
 @login_required 
-def Post_create(request):
+def post_create(request):
     if request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')
@@ -149,3 +149,20 @@ def comment_delete(request, post_id,comment_id):
         messages.error(request, f"Errror deleting comment: {str(e)}")
     
     return redirect('post:post_detial', post_id=post_id)
+
+
+#----------------- UP / DOWN Votes ----------------------------
+
+@login_required 
+def post_upvote(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    post.downvotes.remove(request.user)
+    post.upvotes.add(request.user)
+    return redirect('posts: post_detai', post_id=post_id)
+
+@login_required
+def post_downvote(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    post.upvotes.remove(request.user)
+    post.downvotes.add(request.user)
+    return redirect('posts: post_detai', post_id=post_id)
