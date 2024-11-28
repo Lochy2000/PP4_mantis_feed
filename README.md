@@ -51,5 +51,9 @@ that the models.py were working correctly.
 Templates still to be created, but can see the path is working as it should
 ![image](https://github.com/user-attachments/assets/c10763ff-810a-48f9-9d16-83fe20b5c49c)
 
+#### Putting it together
+Created a simple post_list.html to make sure everything is working.
+![image](https://github.com/user-attachments/assets/db553aea-95f3-4b5e-a4b4-9c907d4b631b)
+
 
 
