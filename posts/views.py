@@ -28,7 +28,7 @@ def post_list(request):
 
 def post_detail(request, post_id):
     post = get_object_or_404(Post,id=post_id)
-    comments = post.comments.filter(parents=None)
+    comments = post.comments.filter(parent=None)
 
     return render(request, 'posts/post_detail.html',{
         'post': post,

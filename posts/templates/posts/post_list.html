@@ -1,28 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post list</title>
-</head>
-<body>
-    <h1> Posts </h1>
+{% extends 'posts/base.html' %}
+{% block title %} Home {% endblock %}
 
-    <p> Debug : Number of posts loaded: {{posts|length}}</p>
-
-    {% if posts %}
-        <ul>
-            {% for post in posts %}
-                <li>
-                    ID: {{post.id}}|
-                    Title: {{post.title|default:"No title"}}|
-                    Author: {{ post.author }}|
-                    Created {{post.created_at }}
-                </li>
+{%block content %} 
+<div class="post-container">
+    <div class="posts-main">
+        {% for post in posts %}
+            <article class="post-card">
+                <div class="vote-section">
+                    <a href="{% url 'posts:post_upvote' post.id %}" class="vote-link">⬆️</a>
+                    <span>{{ post.score }}</span>
+                    <a href="{% url 'posts:post_downvote' post.id %}" class="vote-link">⬇️</a>
+                </div>
+                <h2><a href="{% url 'posts:post_detail' post.id %}">{{ post.title }}</a></h2>
+                <p>{{ post.content|truncatewords:50 }}</p>
+                <div class="post-meta">
+                    Posted by {{post.author.username}} | {{post.created_at|timesince}} ago | {{post.comments.count}} comments
+                </div>
+            </article>
+        {% empty %}
+            <p>No posts yet!</p>
+        {% endfor %}
+    </div>
+    <aside>
+        <div class="post-card">
+            <h3>Top Posts</h3>
+            {% for post in top_posts %}
+                <div>
+                    <a href="{% url 'posts:post_detail' post.id %}"></a>
+                </div>
             {% endfor %}
-        </ul>
-    {% else %}
-        <p>No posts avaliable.</p>
-    {% endif %}
-</body>
-</html>
+        </div>
+    </aside>
+</div>
+{% endblock %}
