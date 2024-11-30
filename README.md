@@ -30,6 +30,12 @@ My version of a reddit clone using django for my project 4
 - pip install gunicorn - for deployment
 - pip install whitenoise - for static files
 
+### Adding static CSS
+- Setup a static/css/style.css file system in the root file
+- Setup settings.py to configure the static files.
+- In base.html use { % load static % } to access css in html.
+- Finally, run python mamange.py collectstatic. 
+
 
 ## Early Testing 
 
