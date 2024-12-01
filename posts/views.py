@@ -28,7 +28,7 @@ def post_list(request):
 
 def post_detail(request, post_id):
     post = get_object_or_404(Post,id=post_id)
-    comments = post.comments.filter(parent=None)
+    comments = post.comments.filter(parents=None)
 
     return render(request, 'posts/post_detail.html',{
         'post': post,
@@ -42,7 +42,7 @@ def post_create(request):
         title = request.POST.get('title')
         content = request.POST.get('content')
 
-        if not all ([title.content]):
+        if not all([title, content]):
             messages.error(request,"Please fill in all fields.")
             return redirect('posts:post_create')
 
@@ -57,8 +57,9 @@ def post_create(request):
         except Exception as e:
             messages.error(request, f"Error creating post: {str(e)}")
             return redirect('posts:post_create')
-
-    return render (request, 'post/post_form',{'post':post})
+        
+    post = None
+    return render (request, 'posts/post_form.html',{'post':post})
 
 # update / edit posts
 def post_edit(request, post_id):
@@ -160,11 +161,11 @@ def post_upvote(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     post.downvotes.remove(request.user)
     post.upvotes.add(request.user)
-    return redirect('posts: post_detai', post_id=post_id)
+    return redirect('posts:post_detail', post_id=post_id)
 
 @login_required
 def post_downvote(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     post.upvotes.remove(request.user)
     post.downvotes.add(request.user)
-    return redirect('posts: post_detai', post_id=post_id)
+    return redirect('posts:post_detail', post_id=post_id)

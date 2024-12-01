@@ -1,0 +1,14 @@
+{% extends 'posts/base.html' %}
+{% block title %}{% if post %}Edit Post{% else %} New Post{% endif %}{% endblock %}
+
+{% block content %}
+<div class="from-container">
+    <h2>{% if post %} Edit Post{% else %} Create New Post {% endif %}</h2>
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="title" class="form-field" value=" {{post.title|default:''}}" placeholder="Post Title">
+        <textarea name="content" class="form-field" placeholder="Post Content">{{ post.content|default:''}}</textarea>
+        <button type="submit" class="btn">{% if post %}Update{% else %}Create{% endif %}</button>
+    </form>
+</div>
+{% endblock %}
