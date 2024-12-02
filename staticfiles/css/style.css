@@ -184,14 +184,32 @@
   @media (max-width: 768px) {
     .post-container {
       grid-template-columns: 1fr;
+      display: flex;
+      flex-direction: column;
+      padding: 0 1rem;
     }
     
     .nav-container {
       flex-direction: column;
       gap: 1rem;
     }
-    aside{
-      position: sticky;
-      top: 1rem;
+    
+    aside {
+      order: -1;
     }
+
+    aside .post-card{
+      display: inline-block;
+      min-width: 200px;
+      width: auto;
+      max-width: 100%;
+    }
+
+    .post-card{
+      margin: 1rem 0;
+    }
+    .top-post-item{
+      width: 100%;
+    }
+
   }
