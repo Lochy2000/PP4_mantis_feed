@@ -1,0 +1,18 @@
+{% extends 'posts/base.html' %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Delete Post</h2>
+
+    <div class="message">
+        <p>Are you sure you want to delete "{{ post.title}}"?</p>
+        <p>This action cannot be undone.</p>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn"> Delete </button>
+        <a href="{% url 'posts:post_detail' post.id%}" class="btn"> Cancel</a>
+    </form>
+</div>
+{% endblock %}

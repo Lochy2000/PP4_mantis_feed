@@ -96,12 +96,12 @@ def post_delete(request, post_id):
         messages.error(request, "You cannot delete this post.")
         return redirect ('posts:post_detail', post_id=post.id)
     
-    if request.method == 'Post':
+    if request.method == 'POST':
         post.delete()
         messages.success(request, "Post succesfully deleted!")
-        return redirect('posts:post_detial', post_id=post.id)
+        return redirect('posts:post_list')
     
-    return render(request, 'sts/post_confirm_delete.html', {'post' : post})
+    return render(request, 'posts/post_confirm_delete.html', {'post' : post})
 
 
 
