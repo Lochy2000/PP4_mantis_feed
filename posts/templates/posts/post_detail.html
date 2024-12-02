@@ -38,7 +38,10 @@
                 <small>
                     {{comment.author.username}} | {{ comment.created_at|timesince}} ago
                     {% if user == comment.author %}
-                        | <a href="{% url ' posts:comment_delete' post.id comment.id %}"> Delete</a>
+                        <form method="post" action="{% url 'posts:comment_delete' post.id comment.id %}">
+                            {%  csrf_token %}
+                            <button type="submit" class="btn"> Delete </button>
+                        </form>
                     {% endif %}
                 </small>
             </div>

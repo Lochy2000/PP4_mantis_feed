@@ -85,7 +85,7 @@ def post_edit(request, post_id):
             except Exception as e:
                 messages.error(request, f"Error updating post: {str(e)}")
             
-    return render(request, 'post/post_form.html',{'post':post})
+    return render(request, 'posts/post_form.html',{'post':post})
 
 #Deleting posts
 @login_required
@@ -123,11 +123,11 @@ def comment_create(request, post_id):
             comment = Comment(
                 post=post,
                 author=request.user,
-                conent=content
+                content=content
             )
             if parent_id:
-                parent_comment = get_object_or_404(Comment, id=parent_comment)
-                comment.parents = parent_comment
+                parent_comment = get_object_or_404(Comment, id=parent_id)
+                comment.parent = parent_comment
 
             comment.save()
             messages.success(request, "Comment added successfully!")
@@ -144,14 +144,14 @@ def comment_delete(request, post_id,comment_id):
 
     if request.user != comment.author:
         messages.error(request, "You cannot delete this comment!")
-        return redirect('post:post_detail', post_id=post_id)
+        return redirect('posts:post_detail', post_id=post_id)
     try:
         comment.delete()
         messages.success(request, "Comment successfully deleted!")
     except Exception as e:
         messages.error(request, f"Errror deleting comment: {str(e)}")
     
-    return redirect('post:post_detial', post_id=post_id)
+    return redirect('posts:post_detail', post_id=post_id)
 
 
 #----------------- UP / DOWN Votes ----------------------------
