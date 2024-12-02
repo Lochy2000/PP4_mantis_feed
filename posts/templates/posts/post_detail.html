@@ -1,0 +1,49 @@
+{% extends 'posts/base.html' %}
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<!--Post sections-->
+<div class="post-container">
+    <div class="posts-main">
+        <article class="post-card">
+            <div class="vote-section">
+                <a href="{% url 'posts:post_upvote' post.id %}" class="vote-link">⬆️</a>
+                <span>{{ post.score }}</span>
+                <a href="{% url 'posts:post_downvote' post.id %}" class="vote-link">⬇️</a>
+            </div>
+            <h1>{{post.title}}</h1>
+            <p>{{ post.content }}</p>
+            <div class="post-meta">
+                Posted by {{post.author.username}} | {{ post.created_at|timesince}} ago
+                {% if user == post.author %}
+                        <a href="{% url 'posts:post_edit' post.id %}"> Edit </a>
+                        <a href="{% url 'posts:post_delete' post.id %}">Delete</a>
+                {% endif %}
+            </div>
+        </article>
+
+        <!--Comment sections-->
+        <div class="comment-seection">
+            {% if user.is_authenticated %}
+            <form method ="post" action ="{% url 'posts:comment_create' post.id %}" class="form-container">
+                {% csrf_token %}
+                <textarea name="content" class="form-field" placeholder="Add a comment..."></textarea>
+                <button type="submit" class="btn">Comment</button>
+            </form>
+            {% endif %}
+
+            {% for comment in comments %}
+            <div class="comment">
+                <p>{{ comment.content }}</p>
+                <small>
+                    {{comment.author.username}} | {{ comment.created_at|timesince}} ago
+                    {% if user == comment.author %}
+                        | <a href="{% url ' posts:comment_delete' post.id comment.id %}"> Delete</a>
+                    {% endif %}
+                </small>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

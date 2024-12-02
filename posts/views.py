@@ -117,7 +117,7 @@ def comment_create(request, post_id):
 
         if not content:
             messages.error(request, "Comment cannot be empty.")
-            return redirect ('post:post_detail', post_id=post.id)
+            return redirect ('posts:post_detail', post_id=post.id)
         
         try: 
             comment = Comment(
@@ -135,7 +135,7 @@ def comment_create(request, post_id):
         except Exception as e:
             messages.error(request, f"Error adding comment :{str(e)}")
 
-    return redirect('post:post_detail', post_id=post.id)
+    return redirect('posts:post_detail', post_id=post.id)
 
 #deleting comments
 @login_required
