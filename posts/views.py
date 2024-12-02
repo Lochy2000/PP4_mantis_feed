@@ -6,7 +6,8 @@ from django.http import JsonResponse
 from django.urls import reverse_lazy, reverse
 from django.contrib import messages 
 from .models import Post, Comment
-from django.db.models import Count
+from django.db.models import Count, F
+from django.db.models.functions import Coalesce
 
 # Create your views here.
 
@@ -18,8 +19,10 @@ def post_list(request):
     print("Posts:", [p.title for p in posts])
 
     top_posts = Post.objects.annotate(
-        total_score = Count('upvotes') - Count('downvotes')
-    ).order_by('-total_score')[:5]
+        #total_score = Count('upvotes') - Count('downvotes')
+        score=Coalesce(Count('upvotes', distinct=True),0) -
+              Coalesce(Count('downvotes', distinct=True),0)  
+    ).order_by('-score', 'created_at')[:3]
 
     return render(request, 'posts/post_list.html',{
         'posts' : posts,

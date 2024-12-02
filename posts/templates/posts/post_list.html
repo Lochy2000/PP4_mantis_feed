@@ -25,9 +25,23 @@
         <div class="post-card">
             <h3>Top Posts</h3>
             {% for post in top_posts %}
-                <div>
-                    <a href="{% url 'posts:post_detail' post.id %}"></a>
+                <div class="top-post-item">
+                    <div class="top-post-score">
+                        <span> {{ post.score }}</span>
+                    </div>
+                    <div class="top-post-content">
+                        <div>
+                            <a href="{% url 'posts:post_detail' post.id %}" class="top-post-title">
+                                {{ post.title|truncatechars:50}}
+                            </a>
+                        </div>
+                    </div>
                 </div>
+                {% if not forloop.last %}
+                    <hr class="top-post-divider">
+                {% endif %}
+            {% empty %}
+            <p class="no-post">No top Posts yet</p>
             {% endfor %}
         </div>
     </aside>
