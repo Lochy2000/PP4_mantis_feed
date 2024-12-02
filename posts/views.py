@@ -1,15 +1,44 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView,UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import JsonResponse
 from django.urls import reverse_lazy, reverse
 from django.contrib import messages 
-from .models import Post, Comment
+from .models import Post, Comment#, Category
 from django.db.models import Count, F
 from django.db.models.functions import Coalesce
 
 # Create your views here.
+# categories 
+def is_superuser(user):
+    return user.is_superuser
+
+@user_passes_test(is_superuser)
+def catergory_create(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        description = request.POST.get('description')
+
+        if not name: 
+            messages.error(request, "Category name is required.")
+            return redirect('posts:category_create')
+        
+        try:
+            category = Category.objects.create(
+                name=name,
+                description=description
+            )
+            messages.success(request="Category successfully created.")
+            return redirect('posts:category_list')
+        except Exception as e:
+            messages.error(request, f"error creating category: {str(e)}")
+            return redirect('posts:category_create')
+        
+    return render (request, 'posts/category_form.html')
+
+#def category_detail(request, category.id):
+#def category_list(request):
 
 #display posts and comments
 
