@@ -55,10 +55,23 @@ from django.db.models.functions import Coalesce
 #display posts and comments
 
 def post_list(request):
-    posts = Post.objects.all().order_by('-created_at')
+    category_id = request.Get.get('category')
     categories = Category.objects.all()
-    print("number of posts:", posts.count())
-    print("Posts:", [p.title for p in posts])
+
+    if category_id:
+        try:
+            selected_category = Category.objects.get(id=category_id)
+            post = Post.objects.filter(category=selected_category).order_by('-create_at')
+        except Category.DoesNotExist:
+            selected_category = None
+            posts = Post.objects.all().order_by('-created_at')
+    else:
+        selected_category = None
+        posts = Post.objects.all().order_by('-created_at')
+
+    posts = Post.objects.all().order_by('-created_at')
+    #print("number of posts:", posts.count())
+    #print("Posts:", [p.title for p in posts])
 
     top_posts = Post.objects.annotate(
         #total_score = Count('upvotes') - Count('downvotes')
@@ -70,6 +83,7 @@ def post_list(request):
         'posts' : posts,
         'top_posts' : top_posts,
         'categories':categories
+        'selected_category': selected_category
     })
 
 def post_detail(request, post_id):
