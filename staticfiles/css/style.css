@@ -1,3 +1,5 @@
+
+/* main */
 :root {
     --primary-green: #064e3b;
     --accent-green: #059669;
@@ -39,6 +41,7 @@
     font-weight: bold;
   }
   
+  /* post */
   .post-container {
     max-width: 1200px;
     margin: 2rem auto;
@@ -75,6 +78,8 @@
     color: var(--text-light);
   }
   
+  /* Comment */ 
+
   .comment-section {
     margin-top: 1rem;
     padding-top: 1rem;
@@ -87,22 +92,116 @@
     padding: 1rem;
     margin-bottom: 0.5rem;
   }
-  
+
+  /*  Form */
+
   .form-container {
-    max-width: 600px;
+    max-width: 66.6667%;
     margin: 2rem auto;
     padding: 2rem;
-    background-color: var(--light-green);
+    background-color: var(--dark-green);
     border-radius: 8px;
+    box-shadow: o 4px 6px rgba(0, 0, 0, 0.1);
+    color: var(--text-light);
   }
   
+  .from-header{
+    color: var(--text-light);
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .from-header h2{
+    color: var(--dark-green);
+    margin-bottom: 0.5rem;
+    font-size: 1.8rem;
+  }
+
+  .form-subtitle{
+    color: var(--text-light);
+    opacity: 0.8;
+  }
+
+  .form-group{
+    margin-bottom: 1.5rem;
+  }
+
+  .form-group label{
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--dark-green);
+    font-weight: 500;
+  }
+
   .form-field {
     width: 100%;
     padding: 0.75rem;
     margin-bottom: 1rem;
     border: 1px solid var(--accent-green);
     border-radius: 4px;
+    background-color: var(--primary-green);
+    color: var(--text-light);
+    transition: all 0.2s ease;
+    font-size: 1rem;
   }
+  .form-field:focus {
+    outline: none;
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.3);
+  }
+  .form-field::placeholder{
+    counter-reset: var(--text-light);
+    opacity: 0.7;
+  }
+
+  .content-group {
+    min-height: 200px;
+    resize: vertical;
+  }
+
+  select.form-field{
+    appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, var(--accent-green)50%),
+                      linear-gradient(135deg, var(--accent-green) 50%, transparent 50%);
+    background-position:  calc(100%-20px) calc(1rem + 2px),
+                          calc(100%-15px) calc(1rem +2px);
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+    padding-right: 2.5rem;
+  }
+  .form-actions{  
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .sumbit-btn{
+    background-color: var(--accent-green);
+    color: #d1fae5;
+    padding: 0.75rem 1.rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    flex: 1;
+  }
+
+  .sumbit-btn:hover{
+    background-color: var(--primary-green);
+  }
+
+  .cancel-btn{
+    background-color: transparent;
+    color: var(--text-dark);
+    padding: 0.75rem 1.5rem;
+    border: 1px solid var(--accent-green);
+    border-radius: 4px;
+    text-decoration: none;
+    text-align: center;
+    }
+
+    .cancel-btn:hover{
+      background-color: rgba(5, 150, 105 ,0.1);
+    }
   
   .btn {
     padding: 0.75rem 1.5rem;
@@ -193,7 +292,7 @@
       flex-direction: column;
       gap: 1rem;
     }
-    
+
     aside {
       order: -1;
     }

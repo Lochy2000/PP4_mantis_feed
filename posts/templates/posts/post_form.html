@@ -2,10 +2,10 @@
 {% block title %}{% if post %}Edit Post{% else %} New Post{% endif %}{% endblock %}
 
 {% block content %}
-<div class="from-header">
+<div class="form-container">
     <h2>{% if post %} Edit Post{% else %} Create New Post {% endif %}</h2>
     <p class="form-subtitle"> Share your thouhts with the community</p>
-</div>
+
 
     <form method="post">
         {% csrf_token %}
@@ -28,7 +28,7 @@
             <select name="category" id="category" class="form-field">
                 <option value="">Select a category (opitional)</option>
                 {% for category in categories %}
-                <option value="{{ category.id }} {% if post.category_id == category.id} selected {% endif %}">
+                <option value="{{ category.id }}" {% if post.category_id == category.id %}selected{% endif %}>
                     {{ category.name }}
                 </option>
                 {% endfor %}
@@ -53,5 +53,6 @@
             <a href="{% url 'posts:post_list' %}" class="btn cancel-btn">Cancel</a>
         </div>
     </form>
+</div>
 
 {% endblock %}
