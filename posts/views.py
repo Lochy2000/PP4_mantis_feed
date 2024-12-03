@@ -5,45 +5,58 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import JsonResponse
 from django.urls import reverse_lazy, reverse
 from django.contrib import messages 
-from .models import Post, Comment#, Category
+from .models import Post, Comment, Category
 from django.db.models import Count, F
 from django.db.models.functions import Coalesce
 
 # Create your views here.
 # categories 
-def is_superuser(user):
-    return user.is_superuser
+# def is_superuser(user):
+#     return user.is_superuser
 
-@user_passes_test(is_superuser)
-def catergory_create(request):
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        description = request.POST.get('description')
+# @user_passes_test(is_superuser)
+# def catergory_create(request):
+#     if request.method == 'POST':
+#         name = request.POST.get('name')
+#         description = request.POST.get('description')
 
-        if not name: 
-            messages.error(request, "Category name is required.")
-            return redirect('posts:category_create')
+#         if not name: 
+#             messages.error(request, "Category name is required.")
+#             return redirect('posts:category_create')
         
-        try:
-            category = Category.objects.create(
-                name=name,
-                description=description
-            )
-            messages.success(request="Category successfully created.")
-            return redirect('posts:category_list')
-        except Exception as e:
-            messages.error(request, f"error creating category: {str(e)}")
-            return redirect('posts:category_create')
+#         try:
+#             category = Category.objects.create(
+#                 name=name,
+#                 description=description
+#             )
+#             messages.success(request="Category successfully created.")
+#             return redirect('posts:category_list')
+#         except Exception as e:
+#             messages.error(request, f"error creating category: {str(e)}")
+#             return redirect('posts:category_create')
         
-    return render (request, 'posts/category_form.html')
+#     return render (request, 'posts/category_form.html')
 
-#def category_detail(request, category.id):
-#def category_list(request):
+# def category_list(request):
+#     categories = Category.objects.all()
+#     return render(request,'posts/category_list.hrml',{
+#         'categories': categories
+#     })
+
+# def category_detail(request, category_id):
+#     category = get_object_or_404(Category, id=category_id)
+#     posts =category.posts.all()
+#     return render(request, 'posts/category_detail.html',{
+#         'category':category,
+#         'posts':posts
+#     })
+
 
 #display posts and comments
 
 def post_list(request):
     posts = Post.objects.all().order_by('-created_at')
+    categories = Category.objects.all()
     print("number of posts:", posts.count())
     print("Posts:", [p.title for p in posts])
 
@@ -55,7 +68,8 @@ def post_list(request):
 
     return render(request, 'posts/post_list.html',{
         'posts' : posts,
-        'top_posts' : top_posts
+        'top_posts' : top_posts,
+        'categories':categories
     })
 
 def post_detail(request, post_id):
@@ -73,16 +87,22 @@ def post_create(request):
     if request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')
+        category_id = request.POST.get('category')
 
         if not all([title, content]):
             messages.error(request,"Please fill in all fields.")
             return redirect('posts:post_create')
 
         try: 
+            category = None 
+            if category_id:
+                category = Category.objects.get(id=category_id)
+
             post = Post.objects.create(
                 title=title,
                 content=content,
-                author=request.user
+                author=request.user,
+                category=category
             )
             messages.success(request, "Post created successfully!")
             return redirect('posts:post_detail', post_id=post.id)
@@ -90,8 +110,12 @@ def post_create(request):
             messages.error(request, f"Error creating post: {str(e)}")
             return redirect('posts:post_create')
         
-    post = None
-    return render (request, 'posts/post_form.html',{'post':post})
+    #post = None
+    categories =Category.objects.all()
+    return render (request, 'posts/post_form.html', {
+        'post': None,
+        'categories': categories
+    })
 
 # update / edit posts
 def post_edit(request, post_id):
