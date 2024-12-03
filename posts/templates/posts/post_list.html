@@ -2,6 +2,23 @@
 {% block title %} Home {% endblock %}
 
 {%block content %} 
+<nav class="category_nav">
+    <div class="category-nav-container">
+        <ul class="category-list">
+            <li><a href="{% url 'posts:post_list' %}" class="category-link {% if not selected_category %}active{% endif %}">
+                All Posts
+            </a></li>
+            {% for category in categories %}
+            <li>
+                <a href="{% url 'posts:post_list' %}?category={{ category.id }}" class="category-link {% if selected_category.id == category.id %}active{% endif %}">
+                    {{ category.name }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</nav>
+
 <div class="post-container">
     <div class="posts-main">
         {% for post in posts %}
