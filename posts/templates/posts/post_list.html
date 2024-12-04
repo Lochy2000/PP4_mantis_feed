@@ -20,13 +20,6 @@
     <div class="posts-main">
         {% for post in posts %}
             <article class="post-card">
-                <div class="vote-section">
-                    <a href="{% url 'posts:post_upvote' post.id %}" class="vote-link">⬆️</a>
-                    <span>{{ post.score }}</span>
-                    <a href="{% url 'posts:post_downvote' post.id %}" class="vote-link">⬇️</a>
-                </div>
-                <h2><a href="{% url 'posts:post_detail' post.id %}">{{ post.title }}</a></h2>
-                <p>{{ post.content|truncatewords:50 }}</p>
                 <div class="post-meta">
                     Posted by {{post.author.username}} | {{post.created_at|timesince}} ago 
                     {% if post.category %}
@@ -34,11 +27,23 @@
                     {% endif %}
                     | {{post.comments.count}} comments
                 </div>
+
+                <h2><a href="{% url 'posts:post_detail' post.id %}">{{ post.title }}</a></h2>
+                <p>{{ post.content|truncatewords:50 }}</p>
+
+                <div class="vote-section">
+                    <a href="{% url 'posts:post_upvote' post.id %}" class="vote-link">⬆️ <span>{{ post.score }}</span></a>
+                    
+                    <a href="{% url 'posts:comment_create' post.id %}" class="vote-link">💬<span>{{ post.comments.count }}</span></a>
+                    
+                    <!--<a href="{% url 'posts:post_downvote' post.id %}" class="vote-link">⬇️</a> -->
+                </div>
             </article>
         {% empty %}
             <p>No posts yet!</p>
         {% endfor %}
     </div>
+
     <aside>
         <div class="post-card">
             <h3>Top Posts</h3>
