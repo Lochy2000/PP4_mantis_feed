@@ -2,49 +2,53 @@
 {% block title %} Home {% endblock %}
 
 {%block content %} 
-    <div class="category-bar">
-        <div class="category-container">
-            <a href="{% url 'posts:post_list' %}" class="category-item {% if not selected_category %}active{% endif %}">
-                All Posts
-            </a>
-            {% for category in categories %}
-                <a href="{% url 'posts:post_list' %}?category={{ category.id }}" class="category-item {% if selected_category.id == category.id %}active{% endif %}">
-                    {{ category.name }}
+<div class="post-container">
+
+    <div class="content-section">
+        <div class="category-bar">
+            <div class="category-container">
+                <a href="{% url 'posts:post_list' %}" class="category-item {% if not selected_category %}active{% endif %}">
+                    All Posts
                 </a>
+                {% for category in categories %}
+                    <a href="{% url 'posts:post_list' %}?category={{ category.id }}" class="category-item {% if selected_category.id == category.id %}active{% endif %}">
+                        {{ category.name }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+
+
+
+        <div class="posts-main">
+            {% for post in posts %}
+                <article class="post-card">
+                    <div class="post-meta">
+                        Posted by {{post.author.username}} | {{post.created_at|timesince}} ago 
+                        {% if post.category %}
+                        | Category {{post.category.name }} 
+                        {% endif %}
+                    </div>
+
+                    <h2><a href="{% url 'posts:post_detail' post.id %}">{{ post.title }}</a></h2>
+                    <p>{{ post.content|truncatewords:50 }}</p>
+
+                    <div class="vote-section">
+                        <a href="{% url 'posts:post_upvote' post.id %}" class="vote-link">⬆️ <span>{{ post.score }}</span></a>
+                        
+                        <a href="{% url 'posts:comment_create' post.id %}" class="vote-link">💬<span>{{ post.comments.count }}</span></a>
+                        
+                        <!--<a href="{% url 'posts:post_downvote' post.id %}" class="vote-link">⬇️</a> -->
+                    </div>
+                </article>
+            {% empty %}
+                <p>No posts yet!</p>
             {% endfor %}
         </div>
     </div>
 
 
-<div class="post-container">
-    <div class="posts-main">
-        {% for post in posts %}
-            <article class="post-card">
-                <div class="post-meta">
-                    Posted by {{post.author.username}} | {{post.created_at|timesince}} ago 
-                    {% if post.category %}
-                    | Category {{post.category.name }} 
-                    {% endif %}
-                    | {{post.comments.count}} comments
-                </div>
-
-                <h2><a href="{% url 'posts:post_detail' post.id %}">{{ post.title }}</a></h2>
-                <p>{{ post.content|truncatewords:50 }}</p>
-
-                <div class="vote-section">
-                    <a href="{% url 'posts:post_upvote' post.id %}" class="vote-link">⬆️ <span>{{ post.score }}</span></a>
-                    
-                    <a href="{% url 'posts:comment_create' post.id %}" class="vote-link">💬<span>{{ post.comments.count }}</span></a>
-                    
-                    <!--<a href="{% url 'posts:post_downvote' post.id %}" class="vote-link">⬇️</a> -->
-                </div>
-            </article>
-        {% empty %}
-            <p>No posts yet!</p>
-        {% endfor %}
-    </div>
-
-    <aside>
+    <aside class="side-bar">       
         <div class="post-card">
             <h3>Top Posts</h3>
             {% for post in top_posts %}
@@ -68,5 +72,5 @@
             {% endfor %}
         </div>
     </aside>
-</div>
+</div>   
 {% endblock %}
