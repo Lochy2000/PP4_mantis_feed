@@ -69,7 +69,7 @@ def post_list(request):
         selected_category = None
         posts = Post.objects.all().order_by('-created_at')
 
-    posts = Post.objects.all().order_by('-created_at')
+
     #print("number of posts:", posts.count())
     #print("Posts:", [p.title for p in posts])
 
@@ -134,6 +134,7 @@ def post_create(request):
 # update / edit posts
 def post_edit(request, post_id):
     post = get_object_or_404(Post, id = post_id)
+    categories = Category.objects.all()
 
     if request.user != post.author: 
         messages.error(request, "You can't edit this post.")
@@ -142,20 +143,28 @@ def post_edit(request, post_id):
     if request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')
+        category_id = request.POST.get('category')
 
         if not all([title, content]):
             messages.error(request, "Please fill in all fields.")
         else:
             try:
                 post.title = title 
-                post.content = content 
+                post.content = content
+                if category_id:
+                    post.category = Category.objects.get(id=category_id)
+                else:
+                    post.category = None
                 post.save()
                 messages.success(request, "Post updated successfully")
                 return redirect('posts:post_detail', post_id=post.id)
             except Exception as e:
                 messages.error(request, f"Error updating post: {str(e)}")
             
-    return render(request, 'posts/post_form.html',{'post':post})
+    return render(request, 'posts/post_form.html',{
+        'post':post,
+        'categories':categories
+        })
 
 #Deleting posts
 @login_required

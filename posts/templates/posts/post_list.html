@@ -2,22 +2,19 @@
 {% block title %} Home {% endblock %}
 
 {%block content %} 
-<nav class="category_nav">
-    <div class="category-nav-container">
-        <ul class="category-list">
-            <li><a href="{% url 'posts:post_list' %}" class="category-link {% if not selected_category %}active{% endif %}">
+    <div class="category-bar">
+        <div class="category-container">
+            <a href="{% url 'posts:post_list' %}" class="category-item {% if not selected_category %}active{% endif %}">
                 All Posts
-            </a></li>
+            </a>
             {% for category in categories %}
-            <li>
-                <a href="{% url 'posts:post_list' %}?category={{ category.id }}" class="category-link {% if selected_category.id == category.id %}active{% endif %}">
+                <a href="{% url 'posts:post_list' %}?category={{ category.id }}" class="category-item {% if selected_category.id == category.id %}active{% endif %}">
                     {{ category.name }}
                 </a>
-            </li>
             {% endfor %}
-        </ul>
+        </div>
     </div>
-</nav>
+
 
 <div class="post-container">
     <div class="posts-main">
@@ -31,7 +28,11 @@
                 <h2><a href="{% url 'posts:post_detail' post.id %}">{{ post.title }}</a></h2>
                 <p>{{ post.content|truncatewords:50 }}</p>
                 <div class="post-meta">
-                    Posted by {{post.author.username}} | {{post.created_at|timesince}} ago | {{post.comments.count}} comments
+                    Posted by {{post.author.username}} | {{post.created_at|timesince}} ago 
+                    {% if post.category %}
+                    | Category {{post.category.name }} 
+                    {% endif %}
+                    | {{post.comments.count}} comments
                 </div>
             </article>
         {% empty %}
