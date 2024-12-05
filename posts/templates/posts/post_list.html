@@ -71,13 +71,13 @@
                 <p class="no-post">No top Posts yet</p>
             {% endfor %}
         </div>
-        <!-- <div class="post-card">
+        <div class="post-card">
             <h3>Latest News</h3>
-            {% for article in news_articles%}
-                <div class="top-post-itam">
+            {% for article in news_articles %}
+                <div class="top-post-item">
                     <div class="top-post-content">
                         <div>
-                            <a href=" {{ artile.url }}" target="_blank" class="top-post-title">
+                            <a href="{{ article.url }}" target="_blank" class="top-post-title">
                                 {{ article.title|truncatechars:50}}
                             </a>
                             <p class="news-description"> {{ article.description|truncatechars:50}}</p>
@@ -88,9 +88,9 @@
                     <hr class="top-post-divider">
                 {% endif %}
             {% empty %}
-                <p class="no-post">No top Posts yet</p>
+                <p class="no-post">No news available</p>
             {% endfor %}
-        </div> -->
+        </div>
     </aside>
 </div>   
 {% endblock %}

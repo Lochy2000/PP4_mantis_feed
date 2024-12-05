@@ -387,7 +387,12 @@
     text-align: center;
     color: var(--dark-green);
   }
-
+  .news-description {
+    color: var(--text-dark);
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    opacity: 0.8rem;
+  }
 
   /* media queries */
 

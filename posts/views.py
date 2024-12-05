@@ -8,6 +8,7 @@ from django.contrib import messages
 from .models import Post, Comment, Category
 from django.db.models import Count, F
 from django.db.models.functions import Coalesce
+import os
 
 # Create your views here.
 # categories 
@@ -79,12 +80,26 @@ def post_list(request):
               Coalesce(Count('downvotes', distinct=True),0)  
     ).order_by('-score', 'created_at')[:3]
 
+    try:
+        news_api_key = os.environ.get('NEWS_API_KEY')
+        news_url = f"https://gnews.io/api/v4/search?q=tech OR programming OR AI&lang=en&country=us&max=5&apikey={news_api_key}"
+
+        print("API Key:", news_api_key)
+        response = request.get(news_url)
+        news_data = response.json()
+        news_articles = news_data.get ('articles',[])[:2]
+    except: 
+        news_articles = [ ]
+
     return render(request, 'posts/post_list.html',{
         'posts' : posts,
         'top_posts' : top_posts,
         'categories':categories,
-        'selected_category': selected_category
+        'selected_category': selected_category,
+        'news_articles' : news_articles
     })
+
+
 
 def post_detail(request, post_id):
     post = get_object_or_404(Post,id=post_id)
