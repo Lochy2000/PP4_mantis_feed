@@ -68,9 +68,29 @@
                     <hr class="top-post-divider">
                 {% endif %}
             {% empty %}
-            <p class="no-post">No top Posts yet</p>
+                <p class="no-post">No top Posts yet</p>
             {% endfor %}
         </div>
+        <!-- <div class="post-card">
+            <h3>Latest News</h3>
+            {% for article in news_articles%}
+                <div class="top-post-itam">
+                    <div class="top-post-content">
+                        <div>
+                            <a href=" {{ artile.url }}" target="_blank" class="top-post-title">
+                                {{ article.title|truncatechars:50}}
+                            </a>
+                            <p class="news-description"> {{ article.description|truncatechars:50}}</p>
+                        </div>
+                    </div>
+                </div>
+                {% if not forloop.last %}
+                    <hr class="top-post-divider">
+                {% endif %}
+            {% empty %}
+                <p class="no-post">No top Posts yet</p>
+            {% endfor %}
+        </div> -->
     </aside>
 </div>   
 {% endblock %}
