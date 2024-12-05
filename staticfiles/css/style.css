@@ -159,7 +159,7 @@
     padding: 2rem;
     background-color: var(--dark-green);
     border-radius: 8px;
-    box-shadow: o 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 13px 20px 6px rgba(0, 0, 0, 0.5);
     color: var(--text-light);
   }
   
@@ -293,8 +293,56 @@
   
   .message-success {
     background-color: #dcfce7;
-    color: #166534;
+    color: #18fd70;
   }
+
+  /*  Register & login */
+
+  .form-container-register{
+    display: grid;
+    max-width: 66.6667%;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: var(--dark-green);
+    border-radius: 8px;
+    box-shadow: 13px 20px 6px rgba(0, 0, 0, 0.5);
+    color: var(--text-light);
+    justify-content: center;
+  }
+  .form-container-register h2{
+    display: grid;
+    justify-content: center;
+  }
+
+  .register-content{
+    display: flex;
+    grid-template-columns: 1fr auto;
+    gap: 2rem;
+    align-items: center;
+  }
+  .form-container-register form{
+    display: grid;
+    align-content: space-around;
+    justify-content: center;
+  }
+
+  .form-field-wrapper{
+    display: grid;
+    padding-bottom: 0.74rem;
+  }
+  
+  .mantis-image-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+  }
+
+  .mantis-image{
+    width: 250px;
+    height: 200px;
+  }
+
 
   /* Top post styling */
   .side-bar{

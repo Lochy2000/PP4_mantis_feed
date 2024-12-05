@@ -1,25 +1,31 @@
 {% extends 'posts/base.html' %}
+{% load static %}
 
 {% block content %}
-<div class="form-container">
+<div class="form-container-register">
     <h2>Register</h2>
-
-    <form method="post">
-        {% csrf_token %}
-        {% for field in form %}
-        <div class="form-fiel-wrapper">
-            {{ field.label_tag }}
-            {{ field }}
-            {% if field.errors %}
-            <div class="messages message-error">
-                {{ field.errors }}
+    <div class="register-content">
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-field-wrapper">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.errors %}
+                <div class="messages message-error">
+                    {{ field.errors }}
+                </div>
+                {% endif %}
             </div>
-            {% endif %}
-        </div>
-        {% endfor %}
+            {% endfor %}
 
-        <button type="submit" class="btn"> Register </button>
-        <p>Already got an accoount ? <a href="{% url 'login' %}"> Here </a></p>
-    </form>
+            <button type="submit" class="btn"> Register </button>
+            <p>Already got an accoount ? <a href="{% url 'login' %}"> Here </a></p>
+        </form>
+
+        <div class="mantis-image-container">
+            <img src="{% static 'images/mantisoncomputer.png' %} " alt="Mantis on a computer" class="mantis-image">
+        </div>
+    </div>
 </div>
 {% endblock %}
