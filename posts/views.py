@@ -1,3 +1,5 @@
+import os
+import requests
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView,UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -8,7 +10,7 @@ from django.contrib import messages
 from .models import Post, Comment, Category
 from django.db.models import Count, F
 from django.db.models.functions import Coalesce
-import os
+
 
 # Create your views here.
 # categories 
@@ -85,10 +87,11 @@ def post_list(request):
         news_url = f"https://gnews.io/api/v4/search?q=tech OR programming OR AI&lang=en&country=us&max=5&apikey={news_api_key}"
 
         print("API Key:", news_api_key)
-        response = request.get(news_url)
+        response = requests.get(news_url)
         news_data = response.json()
         news_articles = news_data.get ('articles',[])[:2]
-    except: 
+    except: #Exception as e 
+        #print(f'error fetch news {str(e)}')
         news_articles = [ ]
 
     return render(request, 'posts/post_list.html',{
