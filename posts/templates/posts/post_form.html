@@ -46,6 +46,16 @@
             >{{ ppost.content|default:'' }}</textarea>
         </div>
 
+        <div class="form-group">
+            <label for="status">Status</label>
+            <select name="status" id="status" class="form-field">
+                <option value="published" {% if post.status == 'published' %}selected{% endif %}>Published</option>
+                <option value="draft" {% if post.status == 'draft' %}selected{% endif %}>Draft</option>
+                {% if user.is_staff %}
+                <option value="removed" {% if post.status =='removed'%}Selected{% endif %}>Removed</option>
+            </select>
+        </div>
+
         <div class="form-actions">
             <button type="submit" class="btn sumbit-btn">
                 {% if post %}Update Post{% else %} Create post{% endif %}
