@@ -78,8 +78,8 @@ def post_list(request):
         posts = base_query.order_by('-created_at')
 
 
-    #print("number of posts:", posts.count())
-    #print("Posts:", [p.title for p in posts])
+    print("number of posts:", posts.count())
+    print("Posts:", [p.title for p in posts])
 
     top_posts = base_query.annotate(
         score=Coalesce(Count('upvotes', distinct=True),0) -
@@ -89,13 +89,16 @@ def post_list(request):
     try:
         news_api_key = os.environ.get('NEWS_API_KEY')
         news_url = f"https://gnews.io/api/v4/search?q=web+development+OR+javascript+OR+python&lang=en&max=5&apikey={news_api_key}"
+        if not news_api_key:
+            raise ValueError("News API Key not found")
 
         print("API Key:", news_api_key)
         response = requests.get(news_url)
         news_data = response.json()
         news_articles = news_data.get ('articles',[])[:2]
-    except: #Exception as e 
-        #print(f'error fetch news {str(e)}')
+
+    except Exception as e:
+        print(f'error fetch news {str(e)}')
         news_articles = [ ]
 
     return render(request, 'posts/post_list.html',{
@@ -111,6 +114,7 @@ def post_list(request):
 def post_detail(request, post_id):
     post = get_object_or_404(Post,id=post_id)
     comments = post.comments.filter(parents=None)
+    
 
     return render(request, 'posts/post_detail.html',{
         'post': post,
