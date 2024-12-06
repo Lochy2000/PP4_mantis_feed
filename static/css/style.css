@@ -70,6 +70,22 @@
     text-decoration: none;
     color: var(--dark-green) ;
   }
+  .post-status {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    background-color: var(--accent-green);
+    color: var(--text-light);
+    margin-left: 0.5rem;
+  }
+  .post-status.draft{
+    background-color: #076b34;
+  }
+  .post-status.removed{
+    background-color: #022c22;
+  }
   
   .vote-section {
     display: flex;
@@ -339,8 +355,8 @@
   }
 
   .mantis-image{
-    width: 250px;
-    height: 300px;
+    width: 120px;
+    height: 100px;
   }
 
 

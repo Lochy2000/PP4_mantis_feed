@@ -14,12 +14,12 @@
             <h1>{{post.title}}</h1>
             <p>{{ post.content }}</p>
             <div class="post-meta">
-                Posted by {{post.author.username}} | {{ post.created_at|timesince}} ago
+                Posted by {{post.author.username}} | {{ post.created_at|timesince}} ago |
                 {% if post.status != 'published' %}
-                    <span class="post-status">Status: {{ post.status|title }}</span>
+                    <span class="post-status">Status: {{ post.status|title }} |</span>
                 {% endif %}
                 {% if user == post.author %}
-                        <a href="{% url 'posts:post_edit' post.id %}"> Edit </a>
+                        <a href="{% url 'posts:post_edit' post.id %}"> Edit |</a>
                         <a href="{% url 'posts:post_delete' post.id %}">Delete</a>
                 {% endif %}
             </div>

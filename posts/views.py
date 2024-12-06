@@ -124,6 +124,7 @@ def post_create(request):
         title = request.POST.get('title')
         content = request.POST.get('content')
         category_id = request.POST.get('category')
+        status = request.POST.get('status')
 
         if not all([title, content]):
             messages.error(request,"Please fill in all fields.")
@@ -138,7 +139,8 @@ def post_create(request):
                 title=title,
                 content=content,
                 author=request.user,
-                category=category
+                category=category,
+                status=status or 'published'
             )
             messages.success(request, "Post created successfully!")
             return redirect('posts:post_detail', post_id=post.id)
@@ -166,6 +168,7 @@ def post_edit(request, post_id):
         title = request.POST.get('title')
         content = request.POST.get('content')
         category_id = request.POST.get('category')
+        status = request.POST.get('status')
 
         if not all([title, content]):
             messages.error(request, "Please fill in all fields.")
@@ -173,6 +176,7 @@ def post_edit(request, post_id):
             try:
                 post.title = title 
                 post.content = content
+                post.status = status
                 if category_id:
                     post.category = Category.objects.get(id=category_id)
                 else:

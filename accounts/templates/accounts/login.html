@@ -4,6 +4,9 @@
 {% block content%}
 <div class="form-container-register">
     <h2>Login</h2>
+    <div class="mantis-image-container">
+        <img src="{% static 'images/mantisoncomputer.png' %} " alt="Mantis on a computer" class="mantis-image">
+    </div>
     <div class="register-content">
         <form method="post">
             {% csrf_token %}
@@ -11,9 +14,6 @@
             <button type="submit" class="btn"> login</button>
             <p>Don't have an account?<a href="{% url 'register' %}"> Login here</a></p>
         </form>
-        <div class="mantis-image-container">
-            <img src="{% static 'images/mantisoncomputer.png' %} " alt="Mantis on a computer" class="mantis-image">
-        </div>
     </div>
 </div>
 {% endblock %}
