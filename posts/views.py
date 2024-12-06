@@ -61,30 +61,34 @@ def post_list(request):
     category_id = request.GET.get('category')
     categories = Category.objects.all()
 
+    if request.user.is_staff:
+        base_query = Post.objects.all()
+    else:
+        base_query = Post.objects.filter(status='published')
+
     if category_id:
         try:
             selected_category = Category.objects.get(id=category_id)
-            posts = Post.objects.filter(category=selected_category).order_by('-created_at')
+            posts = base_query.filter(category=selected_category).order_by('-created_at')
         except Category.DoesNotExist:
             selected_category = None
-            posts = Post.objects.all().order_by('-created_at')
+            posts = base_query.order_by('-created_at')
     else:
         selected_category = None
-        posts = Post.objects.all().order_by('-created_at')
+        posts = base_query.order_by('-created_at')
 
 
     #print("number of posts:", posts.count())
     #print("Posts:", [p.title for p in posts])
 
-    top_posts = Post.objects.annotate(
-        #total_score = Count('upvotes') - Count('downvotes')
+    top_posts = base_query.annotate(
         score=Coalesce(Count('upvotes', distinct=True),0) -
               Coalesce(Count('downvotes', distinct=True),0)  
     ).order_by('-score', 'created_at')[:3]
 
     try:
         news_api_key = os.environ.get('NEWS_API_KEY')
-        news_url = f"https://gnews.io/api/v4/search?q=tech OR programming OR AI&lang=en&country=us&max=5&apikey={news_api_key}"
+        news_url = f"https://gnews.io/api/v4/search?q=web+development+OR+javascript+OR+python&lang=en&max=5&apikey={news_api_key}"
 
         print("API Key:", news_api_key)
         response = requests.get(news_url)

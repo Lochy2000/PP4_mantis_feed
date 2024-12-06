@@ -34,6 +34,15 @@ class Post(models.Model):
         null=True,
         blank=True
     )
+    status = models.CharField(
+        max_length=10,
+        choices=[
+            ('draft','Draft'),
+            ('published','Published'),
+            ('removed','Removed')
+        ],
+        default='published'
+    )
 
     class Meta:
         ordering = ['-created_at'] #orders posts form newest to oldest
