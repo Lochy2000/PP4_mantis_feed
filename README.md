@@ -2,9 +2,20 @@
 
 My version of a reddit clone using django for my project 4
 
+## Project Overview
+- #### UX
+- #### Agile Development
+- #### Features
+- #### Technologies Used
+- #### Testing
+- #### Deployment
+- #### Credits
+
 ## Entity Relation Diagram
 
 ![image](https://github.com/user-attachments/assets/1cc346c5-d911-4165-9c62-7a4b32a2344d)
+
+
 
 ## Getting setup 
 
