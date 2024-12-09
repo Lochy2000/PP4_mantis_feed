@@ -14,16 +14,38 @@ My version of a reddit clone using django for my project 4
 ## UX 
 - ### Strategy
 - ### Desgin
-- ### WireFrames
-- ### Agile Development 
+- ### WireFrames 
 - ### Data Schema
-#### Entity Relation Diagram
+- ### Entity Relation Diagram
 ![image](https://github.com/user-attachments/assets/1cc346c5-d911-4165-9c62-7a4b32a2344d)
 
+## Agile Development
+- ### Link to project board (github projects
+- ### User stories
+- ### MOSCOW prioritization 
+
+## Features
+
+### Exisiting Features
+- #### Nav + header
+- #### All features with CRUD fuctionaility
+- #### User registration and login
+- #### Response / feedback messages
+
+### Future Features 
+- #### Respons / like comments
+- #### Add images to posts_create and post_list
+
+## Technologies Used
+
+### Languages
+- #### HTML
+- #### CSS
+- #### Python
 
 
-## Getting setup 
-
+## Deployment
+###Step-by-step deployment instructions:
 - Create a github repository and clone it to local or virutal IDE.
 - Setup virtiual envionment - python -m venv venv or source venv/bin/activate
 - Install Django - pip install django
