@@ -43,9 +43,37 @@ My version of a reddit clone using django for my project 4
 - #### CSS
 - #### Python
 
+### Frameworks & libarires 
+- #### Django
+- #### Database (Postgresql / MYSQL)
+
+### Tools & Programs 
+- #### Github
+- #### Visual Studio Code
+- #### Canva & Adobe editor
+
+### Testing 
+#### Code Validation 
+- #### CSS Validation
+- #### Python Validation
+
+#### Manual testing 
+- Feature Testing
+- Brower compatibility
+- Navigation testing
+- CRUD functionaility testing
+- Authentication Testing
+
+### Bugs
+
+#### Fixed 
+#### Known Issues
+
+ 
+
 
 ## Deployment
-###Step-by-step deployment instructions:
+### Step-by-step deployment instructions:
 - Create a github repository and clone it to local or virutal IDE.
 - Setup virtiual envionment - python -m venv venv or source venv/bin/activate
 - Install Django - pip install django
@@ -104,6 +132,9 @@ Created a simple post_list.html to make sure everything is working.
 I had an idea what i wanted to the page to look like. Which I build as a simple web page with css and html. 
 
 ![image](https://github.com/user-attachments/assets/d37dbb95-3777-47d4-a78a-586321029c61)
+
+
+## Credits 
 
 
 
