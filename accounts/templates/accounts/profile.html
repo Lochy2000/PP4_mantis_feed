@@ -1,0 +1,44 @@
+{% extends 'posts/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="form-container-register">
+    <h2>{{ user.username }}'s Profile</h2>
+
+    <div class="profile-content">
+        <div class="profile-header">
+            {% if user.userprofile.profile_picture %}
+                <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture" class="profile-picture">
+            {% endif %}
+            <div class="profile-stats">
+                <h3> {{ user.name }}</h3>
+                <p>Karama: {{ user.userprofile.karma }}</p>
+                <p>Member since: {{ user.date_joined|date }}</p>
+            </div>
+        </div>
+
+        {% if user.userprofile.bio %}
+            <div class="profile-bio">
+                <h4>About Me </h4>
+                <p>{{ user.userprofile.bio }}</p>
+            </div>
+        {% endif %}
+
+        {% if user == request.user %}
+            <a href="{% url 'edit_profile %}" class="btn"> Edit Profile </a>
+        {% endif %}
+
+        <div class="user-post">
+            <h3>Posts</h3>
+            {% for post in user.posts.all %}
+                <div class="post-card">
+                    <h4><a href="{% url 'posts:post_detail' post.id %}">{{ post.title }}</a></h4>
+                    <p> Score: {{ post.score }}</p>
+                </div>
+            {% empty %}
+                <p>No posts yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
