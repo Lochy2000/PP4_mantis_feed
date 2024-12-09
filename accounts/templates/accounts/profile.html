@@ -9,10 +9,13 @@
         <div class="profile-header">
             {% if user.userprofile.profile_picture %}
                 <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture" class="profile-picture">
+            {% else %}
+                <p>No Profile Picture</p>
             {% endif %}
             <div class="profile-stats">
-                <h3> {{ user.name }}</h3>
-                <p>Karama: {{ user.userprofile.karma }}</p>
+                <h3> {{ user.username }}</h3>
+                <p>Karma: {{ user.userprofile.karma }}</p>
+                <p>Total Posts: {{ user.posts.count }}</p>
                 <p>Member since: {{ user.date_joined|date }}</p>
             </div>
         </div>

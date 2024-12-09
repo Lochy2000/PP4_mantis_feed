@@ -8,19 +8,23 @@ from django.dispatch import receiver
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=200, blank=True)
-    Karama = models.IntegerField(default=0)
+    karma = models.IntegerField(default=0)
     profile_picture = models.ImageField(upload_to='profile_pics/', default='profile_pics/default.png', blank=True)
 
     def __str__(self):
         return f'{self.user.username} Profile'
     
-    def update_karama(self):
-        post_karma = sum(post.sore() for post in self.user.posts.all())
-        self.Karama  = post_karma
+    def update_karma(self):
+        posts = self.user.posts.all()
+        total_karma = 0 
+        for post in posts:
+            total_karma += post.score()
+        self.karma = total_karma
         self.save()
-
+        return self.karma
+    
 @receiver(post_save, sender=User)
-def create_user_profile(send, instance, created, **kwargs):
+def create_user_profile(sender, instance, created, **kwargs):
     if created: 
         UserProfile.objects.create(user=instance)
 @receiver(post_save, sender=User)

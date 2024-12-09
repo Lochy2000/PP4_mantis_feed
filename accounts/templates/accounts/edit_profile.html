@@ -1,0 +1,28 @@
+{% extends 'posts/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="form-container-register">
+    <h2>Edit Profile</h2>
+    <div class="register-content">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-field-wrapper">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.errors %}
+                <div class="messages message-error">
+                    {{ field.errors }}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <div class="form-actions">
+                <button type="submit" class="btn">Save Changes</button>
+                <a href="{% url 'profile' %}" class="btn cancel-btn">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

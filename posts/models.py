@@ -51,7 +51,10 @@ class Post(models.Model):
         return self.title  #returns blog title in admin panel
     
     def score(self):
-        return self.upvotes.count() - self.downvotes.count() #this will calculate the most upvoted posts.
+        score = self.upvotes.count() - self.downvotes.count()
+        print (f"calculating score for posts {self.id}:{score}")
+        return score #this will calculate the most upvoted posts.
+        
     
     def vote(self, user, direction): #handles voting logic. user presses up it removed any downvote they may have added and adds it to the upvote. 
         if direction == 'up':

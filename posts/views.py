@@ -95,7 +95,7 @@ def post_list(request):
         print("API Key:", news_api_key)
         response = requests.get(news_url)
         news_data = response.json()
-        news_articles = news_data.get ('articles',[])[:2]
+        news_articles = news_data.get ('articles',[])[:4]
 
     except Exception as e:
         print(f'error fetch news {str(e)}')
@@ -268,15 +268,18 @@ def comment_delete(request, post_id,comment_id):
 @login_required 
 def post_upvote(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    post.downvotes.remove(request.user)
-    post.upvotes.add(request.user)
-    post.author.userprofile.update_karma()
+    if request.user != post.author:
+        post.downvotes.remove(request.user)
+        post.upvotes.add(request.user)
+        post.author.userprofile.update_karma()
+        print(f"new karma total: {post.author.userprofile.karma}")
     return redirect('posts:post_detail', post_id=post_id)
 
 @login_required
 def post_downvote(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    post.upvotes.remove(request.user)
-    post.downvotes.add(request.user)
-    post.author.userprofile.update_karma()
+    if request.user != post.author:
+        post.upvotes.remove(request.user)
+        post.downvotes.add(request.user)
+        post.author.userprofile.update_karma()  
     return redirect('posts:post_detail', post_id=post_id)
