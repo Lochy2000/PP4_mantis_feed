@@ -19,10 +19,11 @@
             <div>
                 {% if user.is_authenticated %}
                     <a href="{% url 'posts:post_create' %}" class="btn">New Post</a>
+                    <a href="{% url 'profile' %}" class="btn"> Profile</a>
                     
                     <form method="post"action="{% url 'logout' %}" style="display: inline;">
                         {% csrf_token %}
-                        <button type="submit" class="btn"> <span>{{user.username}}</span> | logout  </button>
+                        <button type="submit" class="btn"> <span>{{user.username}} ({{ user.userprofile.karma}})</span> | logout  </button>
                     </form>
                 {% else %}
                 <a href="{% url 'login' %}" class="btn"> Login </a>

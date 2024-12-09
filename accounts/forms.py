@@ -5,7 +5,7 @@ from .models import UserProfile
 
 class UserRegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
-    bio = forms.CharField(widget=forms.Textarea, requred=False)
+    bio = forms.CharField(widget=forms.Textarea, required=False)
     profile_picture = forms.ImageField(required=False)
 
     class Meta:

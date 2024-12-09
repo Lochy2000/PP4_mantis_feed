@@ -270,6 +270,7 @@ def post_upvote(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     post.downvotes.remove(request.user)
     post.upvotes.add(request.user)
+    post.author.userprofile.update_karma()
     return redirect('posts:post_detail', post_id=post_id)
 
 @login_required
@@ -277,4 +278,5 @@ def post_downvote(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     post.upvotes.remove(request.user)
     post.downvotes.add(request.user)
+    post.author.userprofile.update_karma()
     return redirect('posts:post_detail', post_id=post_id)
