@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth.models import User 
 from django.utils import timezone 
@@ -71,8 +72,18 @@ class Post(models.Model):
         ordering = ['-created_at'] 
 
     def __str__(self):
-        return self.title  
+        return self.title 
     
+def clean(self):
+    """
+    Custome validation. Raises validationerror if validation fails
+    """
+    if self.staus == 'published' and len(self.content) < 10 :
+        raise ValidationError ({
+            'content' : 'Published content must have at least 10 characters'
+        })
+
+# ----- Score & voting --------    
     def score(self):
         """
         Calculate posts score (upvotes - downvotes)
@@ -92,7 +103,6 @@ class Post(models.Model):
         direction (str): vote direction (up or down)
 
         opposite vote is removed if it exisits before adding a new vote.
-
         """
         if direction == 'up':
             self.downvotes.remove(user)
