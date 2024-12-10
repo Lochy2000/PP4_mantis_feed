@@ -5,7 +5,14 @@ import sys
 
 
 def main():
-    """Run administrative tasks."""
+    """
+    Run administrative tasks.
+    
+    Function: 
+    1. sets the django setting module path 
+    2. Attempts to import Django's management module
+
+    """
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mantisfeed.settings')
     try:
         from django.core.management import execute_from_command_line
