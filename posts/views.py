@@ -1,113 +1,88 @@
 import os
 import requests
+import logging 
+
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import ListView, DetailView, CreateView,UpdateView, DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.decorators import login_required, user_passes_test
-from django.http import JsonResponse
-from django.urls import reverse_lazy, reverse
-from django.contrib import messages 
-from .models import Post, Comment, Category
-from django.db.models import Count, F
+from django.urls import reverse
+from django.db.models import Count
 from django.db.models.functions import Coalesce
 
+from django.contrib import messages 
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 
+from .models import Post, Comment, Category
+import logging
+
+logger = logging.getLogger(__name__)
 # Create your views here.
-# categories 
-# def is_superuser(user):
-#     return user.is_superuser
 
-# @user_passes_test(is_superuser)
-# def catergory_create(request):
-#     if request.method == 'POST':
-#         name = request.POST.get('name')
-#         description = request.POST.get('description')
+def fetch_new_articles():
+    """
+    fetch news article api. GNew free api used.
+    """
+    try:
+        news_api_key = os.environ.get('NEWS_API_KEY')
+        if not news_api_key:
+            raise ValueError("News API Key not found")
 
-#         if not name: 
-#             messages.error(request, "Category name is required.")
-#             return redirect('posts:category_create')
-        
-#         try:
-#             category = Category.objects.create(
-#                 name=name,
-#                 description=description
-#             )
-#             messages.success(request="Category successfully created.")
-#             return redirect('posts:category_list')
-#         except Exception as e:
-#             messages.error(request, f"error creating category: {str(e)}")
-#             return redirect('posts:category_create')
-        
-#     return render (request, 'posts/category_form.html')
-
-# def category_list(request):
-#     categories = Category.objects.all()
-#     return render(request,'posts/category_list.hrml',{
-#         'categories': categories
-#     })
-
-# def category_detail(request, category_id):
-#     category = get_object_or_404(Category, id=category_id)
-#     posts =category.posts.all()
-#     return render(request, 'posts/category_detail.html',{
-#         'category':category,
-#         'posts':posts
-#     })
-
+        news_url = f"https://gnews.io/api/v4/search?q=web+development+OR+javascript+OR+python&lang=en&max=5&apikey={news_api_key}"
+        response = requests.get(news_url)
+        response.raise_for_status()
+        return response.json().get('articles',[])[:4]  
+    except Exception as e:
+        logger.error(f"Error fetching new: {str(e)}")
+        return []
 
 #display posts and comments
 
 def post_list(request):
+    """
+    Displays lists of posts, top posts, new api and category section
+    
+    request : HTTP request object
+
+    returns : rendered post list template + its context
+    """
+    #query parameters
     category_id = request.GET.get('category')
-    categories = Category.objects.all()
+    page_number = request.GET.get('page', 1)
 
-    if request.user.is_staff:
-        base_query = Post.objects.all()
-    else:
-        base_query = Post.objects.filter(status='published')
+    #checking status
+    base_query = Post.objects.all() if request.user.is_staff else Post.objects.filter(status='published')
 
+    #applying categories, if required
+    selected_category = None
     if category_id:
         try:
             selected_category = Category.objects.get(id=category_id)
-            posts = base_query.filter(category=selected_category).order_by('-created_at')
+            posts = base_query.filter(category=selected_category)
         except Category.DoesNotExist:
-            selected_category = None
-            posts = base_query.order_by('-created_at')
-    else:
-        selected_category = None
-        posts = base_query.order_by('-created_at')
+            messages.warning(request, "Selected category has not been found.")
 
-
-    print("number of posts:", posts.count())
-    print("Posts:", [p.title for p in posts])
+    #page ordering
+    posts = base_query.order_by('-created_at')
+    paginator = Paginator(posts, 10)
+    page_obj = paginator.get_page(page_number)
 
     top_posts = base_query.annotate(
         score=Coalesce(Count('upvotes', distinct=True),0) -
               Coalesce(Count('downvotes', distinct=True),0)  
     ).order_by('-score', 'created_at')[:3]
 
-    try:
-        news_api_key = os.environ.get('NEWS_API_KEY')
-        news_url = f"https://gnews.io/api/v4/search?q=web+development+OR+javascript+OR+python&lang=en&max=5&apikey={news_api_key}"
-        if not news_api_key:
-            raise ValueError("News API Key not found")
+    #fetcj newsapi
+    news_articles = fetch_new_articles()
 
-        print("API Key:", news_api_key)
-        response = requests.get(news_url)
-        news_data = response.json()
-        news_articles = news_data.get ('articles',[])[:4]
-
-    except Exception as e:
-        print(f'error fetch news {str(e)}')
-        news_articles = [ ]
-
-    return render(request, 'posts/post_list.html',{
+    context = {
+        'page_obj' : page_obj,
         'posts' : posts,
         'top_posts' : top_posts,
-        'categories':categories,
+        'categories': Category.objects.all(),
         'selected_category': selected_category,
         'news_articles' : news_articles
-    })
+    }
+
+    return render(request, 'posts/post_list.html', context)
 
 
 def post_detail(request, post_id):
