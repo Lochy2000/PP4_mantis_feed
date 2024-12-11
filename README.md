@@ -43,7 +43,7 @@ MantisFeed was my version of a Reddit-style discussion platform where users are 
 --text-dark: #065f46
 ```
 #### Typography 
-- ##### Primate font: Inter. Secondary font: sans-serif.
+##### Primate font: Inter. Secondary font: sans-serif.
 - ### WireFrames
 - ### Data Schema
 #### Models 
@@ -77,14 +77,16 @@ MantisFeed was my version of a Reddit-style discussion platform where users are 
    - name (charfield)
    - description (textfield)
    - created_at(datetimefield)
-- ### Entity Relation Diagram
+   ```
+
+ ### Entity Relation Diagram
 ![image](https://github.com/user-attachments/assets/1cc346c5-d911-4165-9c62-7a4b32a2344d)
 
 ## Agile Development
 - ### Link to project board (github projects)
   Created a new project, which could add new issues to
 - ### User stories
-  Created an issues template
+  Created usser stories in the issues section on github. Added a user stort template:
    ```
    As a role I can capability so that received benefit
 
@@ -94,20 +96,85 @@ MantisFeed was my version of a Reddit-style discussion platform where users are 
 
    Acceptance criteria 3
    ```
- This meant new issues could be created fast. The next 
-- ### MOSCOW prioritization 
+ Next added the user stores to projects. Order of user stories were: Todo, In progress and Done:
+ ![image](https://github.com/user-attachments/assets/c4ca4ac5-76d8-4730-8da7-9ac3eca5db64)
+
+ 
+### MOSCOW prioritization
+
+MUST HAVE 
+- user athentication
+- post management (crud)
+- post interaction
+- comments
+- basic ui features
+
+SHOULD HAVE
+- category system
+- advanced post features
+- userprofile
+- advanced ui features
+
+COULD HAVE
+- advanced comment features
+- enhanced post features
+- social features
+- News API
+
+WON'T HAVE
+- Video uploads
+- Direct messaging
+- multiple language support
 
 ## Features
 
 ### Exisiting Features
-- #### Nav + header
-- #### All features with CRUD fuctionaility
-- #### User registration and login
-- #### Response / feedback messages
+#### Nav + header
+- Repsonsive
+- login/register options
+- new post for authenticated users
+- userprofile access
 
-### Future Features 
-- #### Respons / like comments
-- #### Add images to posts_create and post_list
+#### Post list and create
+- CRUD Functionailty
+- Up/downvote
+- Category selection
+- status indicator (draft , published , removed)
+- Must have fields and character limits
+- time stamp and author.
+
+#### Comment
+- Follows CRUD
+- Timestamp and author
+
+#### User Profile
+- Karma display (number of upvotes on all posts)
+- posts display
+- display image
+- bio
+- name
+- edit
+#### Category
+- organise content by topic
+- fiterable post list
+
+#### Top Post
+- display top 3 most upvotes posts
+- Change and update to match most upvotes
+
+#### User registration and login
+- registration required to create a name, use email and proper password
+- login required to authenticate user
+- post, comment authentication
+- user and staff.
+
+#### Response / feedback messages
+
+#### Future Features 
+- Create a direct messaging system
+- Multiple language support
+- Advanced search features
+
 
 ## Technologies Used
 
@@ -115,16 +182,21 @@ MantisFeed was my version of a Reddit-style discussion platform where users are 
 
 - #### HTML
 - #### CSS
-- #### Python
+- #### Python 3.8+
 
 ### Frameworks & libarires 
-- #### Django
-- #### Database (Postgresql / MYSQL)
+- Django 5.1.3
+- Django Allauth
+- Pillow
+- Whitenoise
+- Gunicorn
+
+### Database (Postgresql / MYSQL)
 
 ### Tools & Programs 
-- #### Github
-- #### Visual Studio Code
-- #### Canva & Adobe editor
+- Github
+- Visual Studio Code
+- Canva & Adobe editor
 
 ### Testing 
 #### Code Validation 
