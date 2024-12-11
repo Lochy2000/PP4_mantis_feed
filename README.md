@@ -10,12 +10,12 @@ MantisFeed was my version of a Reddit-style discussion platform where users are 
 
 ## Project Overview
 - [UX](#ux)
-- #### Agile Development
-- #### Features
-- #### Technologies Used
-- #### Testing
-- #### Deployment
-- #### Credits
+- [Agile Development](#agile-development)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Testing](#testing)
+- [Deployment](#deployment)
+- [Credits](#credits)
 
 ## UX 
 - ### Strategy
