@@ -154,6 +154,7 @@ WON'T HAVE
 - bio
 - name
 - edit
+
 #### Category
 - organise content by topic
 - fiterable post list
@@ -170,7 +171,7 @@ WON'T HAVE
 
 #### Response / feedback messages
 
-#### Future Features 
+### Future Features 
 - Create a direct messaging system
 - Multiple language support
 - Advanced search features
@@ -199,16 +200,17 @@ WON'T HAVE
 - Canva & Adobe editor
 
 ### Testing 
+
 #### Code Validation 
-- #### CSS Validation
-- #### Python Validation
+- CSS: W3C Validation
+- HTML: W3C markup Validation
+- Python Validation: PEP8
 
 #### Manual testing 
 
-- ### Early Admin manual testing
+### Early Admin manual testing
 Ran the server using Python manage.py runserver. If this worked added /admin to url and logged in as superuser. Here I could test creating new users and posts. This early manual testing made sure 
 that the models.py were working correctly. 
-
 - #### Creating users 
 ![image](https://github.com/user-attachments/assets/1e6612e9-e39b-4f6a-a4a6-d0f30344b03f)
 ![image](https://github.com/user-attachments/assets/6e12f180-68db-44ee-b8b1-e5fa503f0a60)
@@ -227,8 +229,15 @@ Templates still to be created, but can see the path is working as it should
 Created a simple post_list.html to make sure everything is working.
 ![image](https://github.com/user-attachments/assets/db553aea-95f3-4b5e-a4b4-9c907d4b631b)
 
+### Further Manual Tests
+- USER registration/ login
+- Post CRUD
+- Comment CRUD
+- Voting system
+- Profile Management
+- Resposive Design
 
-
+  
 - Brower compatibility
 - Navigation testing
 - CRUD functionaility testing
@@ -241,6 +250,7 @@ Created a simple post_list.html to make sure everything is working.
 
 
 ## Deployment
+
 ### Step-by-step deployment instructions:
 - Create a github repository and clone it to local or virutal IDE.
 - Setup virtiual envionment - python -m venv venv or source venv/bin/activate
@@ -250,6 +260,13 @@ Created a simple post_list.html to make sure everything is working.
 - Create Django project - django-admin startproject mantisfeed .
 - Create main apps - python manage.py startapp posts and python manage.py startapp accounts
 - Update mantisfeed/settings.py - Add app to installed apps. Update database to add own data_base url
+- Set up environment varaibles
+  ```
+  SECRET_KEY = your_secret_key
+  DEBUG = True
+  DATABASE_URL = your_database_url
+  NEW_API_KEY = your_api_key
+  ```
 
 ### Adding Database 
 - create env.py
