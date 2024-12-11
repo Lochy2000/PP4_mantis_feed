@@ -46,6 +46,16 @@ Nature inspired color palette, CSS:
 - Primate font: Inter. Secondary font: sans-serif.
 - ### WireFrames 
 - ### Data Schema
+#### Models 
+1. **UserProfile**
+   ```python
+   - User (OnetoOne -> user)
+   - bio (textfield)
+   - karma (interfield)
+   - Profile_picture(imagefield)
+3. Posts
+4. comments
+5. Categories
 - ### Entity Relation Diagram
 ![image](https://github.com/user-attachments/assets/1cc346c5-d911-4165-9c62-7a4b32a2344d)
 
