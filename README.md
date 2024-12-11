@@ -1,6 +1,12 @@
 # Maintis Feed 
 
-My version of a reddit clone using django for my project 4
+### Purpose
+MantisFeed was my version of a Reddit-style discussion platform where users are able to share discuss and vote on content. Some features include a karma-base point system, comments, top-post and cetegories.
+
+### Target Audience
+- Tech enthusiasts looking to share and discuss industry news
+- Users looking for topic-focused discussions
+- Creators wanting to share and get feedback
 
 ## Project Overview
 - #### UX
@@ -13,7 +19,31 @@ My version of a reddit clone using django for my project 4
 
 ## UX 
 - ### Strategy
+#### Site Owner goals 
+- Create active discussion community
+- Facilitate meaningful content sharing and discussion
+- Interactive features to maintain user engagement.
+- Build self-moderating system through user voting
+#### User Goals 
+- Share and discover intresting content
+- Topic-focused discussions
+- Using karma point system build a good reputaion
+- easy navigation through content by categories
 - ### Desgin
+I had an idea what i wanted to the page to look like. Which I build as a simple web page with css and html. 
+![image](https://github.com/user-attachments/assets/d37dbb95-3777-47d4-a78a-586321029c61)
+#### Color Scheme 
+Nature inspired color palette, CSS:
+```css
+--primary-green: #064e3b
+--accent-green: #059669
+--light-green: #d1fae5
+--dark-green: #022c22
+--text-light: #ecfdf5
+--text-dark: #065f46
+```
+#### Typography 
+- Primate font: Inter. Secondary font: sans-serif.
 - ### WireFrames 
 - ### Data Schema
 - ### Entity Relation Diagram
@@ -39,8 +69,7 @@ My version of a reddit clone using django for my project 4
 ## Technologies Used
 
 ### Languages
-I had an idea what i wanted to the page to look like. Which I build as a simple web page with css and html. 
-![image](https://github.com/user-attachments/assets/d37dbb95-3777-47d4-a78a-586321029c61)
+
 - #### HTML
 - #### CSS
 - #### Python
