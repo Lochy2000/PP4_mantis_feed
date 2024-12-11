@@ -30,10 +30,10 @@ MantisFeed was my version of a Reddit-style discussion platform where users are 
 - Using karma point system build a good reputaion
 - easy navigation through content by categories
 - ### Desgin
-I had an idea what i wanted to the page to look like. Which I build as a simple web page with css and html. 
+##### I had an idea what i wanted to the page to look like. Which I build as a simple web page with css and html. 
 ![image](https://github.com/user-attachments/assets/d37dbb95-3777-47d4-a78a-586321029c61)
 #### Color Scheme 
-Nature inspired color palette, CSS:
+##### Nature inspired color palette, CSS:
 ```css
 --primary-green: #064e3b
 --accent-green: #059669
@@ -43,7 +43,7 @@ Nature inspired color palette, CSS:
 --text-dark: #065f46
 ```
 #### Typography 
-- Primate font: Inter. Secondary font: sans-serif.
+- ##### Primate font: Inter. Secondary font: sans-serif.
 - ### WireFrames 
 - ### Data Schema
 #### Models 
@@ -56,9 +56,13 @@ Nature inspired color palette, CSS:
    ```
 2. **Posts**
    ```python
-   - name (charfield)
-   - description (textfield)
-   - created_at(datetimefield)
+   - title (charfield)
+   - content (textfield)
+   - created_at (datetimefield)
+   - updated_at (datetimefield)
+   - author (foreignkey -> user)
+   - upvotes (ManyToMany -> user)
+   - downvotes (ManyToMany -> user)
    ```
 3. **Comments**
    ```python
@@ -69,6 +73,10 @@ Nature inspired color palette, CSS:
    - post (foreignkey -> post)
    - parents (foreignkey -> parents)
 4. **Categories**
+   ```python
+   - name (charfield)
+   - description (textfield)
+   - created_at(datetimefield)
 - ### Entity Relation Diagram
 ![image](https://github.com/user-attachments/assets/1cc346c5-d911-4165-9c62-7a4b32a2344d)
 
