@@ -85,15 +85,15 @@ MantisFeed was my version of a Reddit-style discussion platform where users are 
   Created a new project, which could add new issues to
 - ### User stories
   Created an issues template
-  ```
-As a role I can capability so that received benefit
+   ```
+   As a role I can capability so that received benefit
 
-Acceptance criteria 1
+   Acceptance criteria 1
 
-Acceptance criteria 2
+   Acceptance criteria 2
 
-Acceptance criteria 3
-```
+   Acceptance criteria 3
+   ```
  This meant new issues could be created fast. The next 
 - ### MOSCOW prioritization 
 
