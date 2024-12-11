@@ -12,26 +12,26 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 
 from .models import Post, Comment, Category
-import logging
 
-logger = logging.getLogger(__name__)
 # Create your views here.
 
-def fetch_new_articles():
+def fetch_new_articles(request):
     """
     fetch news article api. GNew free api used.
     """
     try:
         news_api_key = os.environ.get('NEWS_API_KEY')
         if not news_api_key:
-            raise ValueError("News API Key not found")
+            messages.error(request, "unable to fetch news: API key not vonfigured")
+            return[]
 
         news_url = f"https://gnews.io/api/v4/search?q=web+development+OR+javascript+OR+python&lang=en&max=5&apikey={news_api_key}"
         response = requests.get(news_url)
         response.raise_for_status()
-        return response.json().get('articles',[])[:4]  
+        return response.json().get('articles',[])[:4]
+    
     except Exception as e:
-        logger.error(f"Error fetching new: {str(e)}")
+        messages.warning(request, "unable to load news")
         return []
 
 #display posts and comments
@@ -46,35 +46,44 @@ def post_list(request):
     """
     #query parameters
     category_id = request.GET.get('category')
-    page_number = request.GET.get('page', 1)
 
     #checking status
-    base_query = Post.objects.all() if request.user.is_staff else Post.objects.filter(status='published')
+    
+    if request.user.is_staff:
+        base_query = Post.objects.all() 
+    else:
+        Post.objects.filter(status='published')
 
     #applying categories, if required
     selected_category = None
     if category_id:
         try:
             selected_category = Category.objects.get(id=category_id)
-            posts = base_query.filter(category=selected_category)
+            base_query = base_query.filter(category=selected_category)
+            messages.success(request, F"Showing posts in category: {selected_category.name}")
         except Category.DoesNotExist:
             messages.warning(request, "Selected category has not been found.")
 
     #page ordering
-    posts = base_query.order_by('-created_at')
-    paginator = Paginator(posts, 10)
-    page_obj = paginator.get_page(page_number)
+    try:
+        posts = base_query.order_by('-created_at')
+        if not posts.exists():
+            messages.info(request, "no posts found matching you criteria.")
 
-    top_posts = base_query.annotate(
-        score=Coalesce(Count('upvotes', distinct=True),0) -
-              Coalesce(Count('downvotes', distinct=True),0)  
-    ).order_by('-score', 'created_at')[:3]
+        top_posts = base_query.annotate(
+            score=Coalesce(Count('upvotes', distinct=True),0) -
+                Coalesce(Count('downvotes', distinct=True),0)  
+        ).order_by('-score', 'created_at')[:3]
+
+    except Exception as e:
+        messages.error(request, "threre was an error retriveing posts. Please try again later.")
+        posts = Post.objects.none()
+        top_posts =[]
 
     #fetcj newsapi
-    news_articles = fetch_new_articles()
+    news_articles = fetch_new_articles(request)
 
     context = {
-        'page_obj' : page_obj,
         'posts' : posts,
         'top_posts' : top_posts,
         'categories': Category.objects.all(),
