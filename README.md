@@ -44,7 +44,7 @@ MantisFeed was my version of a Reddit-style discussion platform where users are 
 ```
 #### Typography 
 - ##### Primate font: Inter. Secondary font: sans-serif.
-- ### WireFrames 
+- ### WireFrames
 - ### Data Schema
 #### Models 
 1. **UserProfile**
@@ -81,8 +81,20 @@ MantisFeed was my version of a Reddit-style discussion platform where users are 
 ![image](https://github.com/user-attachments/assets/1cc346c5-d911-4165-9c62-7a4b32a2344d)
 
 ## Agile Development
-- ### Link to project board (github projects
+- ### Link to project board (github projects)
+  Created a new project, which could add new issues to
 - ### User stories
+  Created an issues template
+  ```
+As a role I can capability so that received benefit
+
+Acceptance criteria 1
+
+Acceptance criteria 2
+
+Acceptance criteria 3
+```
+ This meant new issues could be created fast. The next 
 - ### MOSCOW prioritization 
 
 ## Features
