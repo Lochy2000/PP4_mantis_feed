@@ -102,6 +102,7 @@ def post_detail(request, post_id):
         post_id
     returns:
         post = get_object_or_404(Post, id = post_id)
+    Raises: http404 if not found
     """
 
     try:
@@ -119,13 +120,23 @@ def post_detail(request, post_id):
             'post': post,
             'comments' : comments
         })
+    
     except Exception as e:
-        messages.error(request, f"error retrieving post details:{str(e)}")
-        return redirect("posts:post_list")
+        messages.error(request, "Error loading post form. Please try again later.")
+        return redirect('posts:post_list')
 
 #create posts
 @login_required 
 def post_create(request):
+    """
+    Create a new post.
+
+    Arguments:
+            request: http
+
+    returns:
+            rendered post from template or redirects to post details
+    """
     if request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')
@@ -139,7 +150,10 @@ def post_create(request):
         try: 
             category = None 
             if category_id:
-                category = Category.objects.get(id=category_id)
+                try:
+                    category = Category.objects.get(id=category_id)
+                except Category.DoesNotExist:
+                    messages.warning(request, "selected category not found. Post will be created without a category.")
 
             post = Post.objects.create(
                 title=title,
@@ -148,18 +162,29 @@ def post_create(request):
                 category=category,
                 status=status or 'published'
             )
+
             messages.success(request, "Post created successfully!")
             return redirect('posts:post_detail', post_id=post.id)
+        
         except Exception as e:
             messages.error(request, f"Error creating post: {str(e)}")
             return redirect('posts:post_create')
         
-    #post = None
-    categories =Category.objects.all()
-    return render (request, 'posts/post_form.html', {
-        'post': None,
-        'categories': categories
-    })
+    #Display an empty form
+    try:
+        categories =Category.objects.all()
+        if not categories.exists():
+            messages.info(request,"no categoires avaliable.")
+
+        return render (request, 'posts/post_form.html', {
+            'post': None,
+            'categories': categories
+        })
+    
+    except Exception as e:
+        messages.error(request, "Error loading post form. Please try again later.")
+        return redirect('posts:post_list')
+    
 
 # update / edit posts
 def post_edit(request, post_id):
