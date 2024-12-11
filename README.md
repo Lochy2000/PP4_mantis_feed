@@ -9,7 +9,7 @@ MantisFeed was my version of a Reddit-style discussion platform where users are 
 - Creators wanting to share and get feedback
 
 ## Project Overview
-- #### UX
+- [UX](#ux)
 - #### Agile Development
 - #### Features
 - #### Technologies Used
