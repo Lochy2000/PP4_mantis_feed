@@ -9,7 +9,6 @@ from django.db.models.functions import Coalesce
 
 from django.contrib import messages 
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
 
 from .models import Post, Comment, Category
 
@@ -52,7 +51,7 @@ def post_list(request):
     if request.user.is_staff:
         base_query = Post.objects.all() 
     else:
-        Post.objects.filter(status='published')
+        base_query = Post.objects.filter(status='published')
 
     #applying categories, if required
     selected_category = None
@@ -75,7 +74,7 @@ def post_list(request):
                 Coalesce(Count('downvotes', distinct=True),0)  
         ).order_by('-score', 'created_at')[:3]
 
-    except Exception as e:
+    except Exception as e:  
         messages.error(request, "threre was an error retriveing posts. Please try again later.")
         posts = Post.objects.none()
         top_posts =[]
@@ -95,14 +94,34 @@ def post_list(request):
 
 
 def post_detail(request, post_id):
-    post = get_object_or_404(Post,id=post_id)
-    comments = post.comments.filter(parents=None)
-    
+    """
+    Display a specific post and its comments.
 
-    return render(request, 'posts/post_detail.html',{
-        'post': post,
-        'comments' : comments
-    })
+    arguments:
+        request
+        post_id
+    returns:
+        post = get_object_or_404(Post, id = post_id)
+    """
+
+    try:
+        post = get_object_or_404(Post,id=post_id)
+        if post.status != 'published' and not request.user.is_staff and request.user != post.authot:
+            messages.error(request, "you do not have permison to view this post")
+            return redirect('posts:post_list')
+        
+        comments = post.comments.filter(parents=None)
+        
+        if not comments.exists():
+            messages.info(request, "no comments yet! why not be the first?")
+
+        return render(request, 'posts/post_detail.html',{
+            'post': post,
+            'comments' : comments
+        })
+    except Exception as e:
+        messages.error(request, f"error retrieving post details:{str(e)}")
+        return redirect("posts:post_list")
 
 #create posts
 @login_required 
