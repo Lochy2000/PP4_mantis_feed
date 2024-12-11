@@ -53,9 +53,22 @@ Nature inspired color palette, CSS:
    - bio (textfield)
    - karma (interfield)
    - Profile_picture(imagefield)
-3. Posts
-4. comments
-5. Categories
+   ```
+2. **Posts**
+   ```python
+   - name (charfield)
+   - description (textfield)
+   - created_at(datetimefield)
+   ```
+3. **Comments**
+   ```python
+   - content (textfield)
+   - created_at (datetimefield)
+   - update_at (datetimefield)
+   - author (foreignkey -> user)
+   - post (foreignkey -> post)
+   - parents (foreignkey -> parents)
+4. **Categories**
 - ### Entity Relation Diagram
 ![image](https://github.com/user-attachments/assets/1cc346c5-d911-4165-9c62-7a4b32a2344d)
 
