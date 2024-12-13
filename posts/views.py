@@ -201,7 +201,6 @@ def post_edit(request, post_id):
 
     try:
         post = get_object_or_404(Post, id = post_id)
-        categories = Category.objects.all()
 
         if request.user != post.author and or not request.user.is.is_staff: 
             messages.error(request, "You can't edit this post.")
