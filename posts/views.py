@@ -188,40 +188,72 @@ def post_create(request):
 
 # update / edit posts
 def post_edit(request, post_id):
-    post = get_object_or_404(Post, id = post_id)
-    categories = Category.objects.all()
+    """
+    Edit created posts 
 
-    if request.user != post.author: 
-        messages.error(request, "You can't edit this post.")
-        return redirect('posts:post_detail', post_id = post.id)
+    arguments :
+        request:http request object
+        post_id: id of the post that wants to be edited 
+    
+    returns:
+        shows post form temlpate or redirects to post details
+    """
 
-    if request.method == 'POST':
-        title = request.POST.get('title')
-        content = request.POST.get('content')
-        category_id = request.POST.get('category')
-        status = request.POST.get('status')
+    try:
+        post = get_object_or_404(Post, id = post_id)
+        categories = Category.objects.all()
 
-        if not all([title, content]):
-            messages.error(request, "Please fill in all fields.")
-        else:
+        if request.user != post.author and or not request.user.is.is_staff: 
+            messages.error(request, "You can't edit this post.")
+            return redirect('posts:post_detail', post_id = post.id)
+
+        if request.method == 'POST':
+            title = request.POST.get('title')
+            content = request.POST.get('content')
+            category_id = request.POST.get('category')
+            status = request.POST.get('status')
+
+            if not title:
+                messages.error(request,"Post title cannot be empty!")
+                return render(request, 'post/post_form.html',{
+                    'post':post,
+                    'categories': Category.objects.all()
+                })
+            if not content:
+                messages.error(request, "Post content cannot be empty")
+                return render(request, 'post/post_form.html',{
+                    'post':post,
+                    'categories': Category.objects.all()
+                })
+            
             try:
                 post.title = title 
                 post.content = content
                 post.status = status
                 if category_id:
-                    post.category = Category.objects.get(id=category_id)
+                    try:
+                        post.category = Category.objects.get(id=category_id)
+                    except Category.DoesNotExist:
+                        messages.warning(request, "selected category was not found.")
                 else:
                     post.category = None
                 post.save()
                 messages.success(request, "Post updated successfully")
                 return redirect('posts:post_detail', post_id=post.id)
+
             except Exception as e:
                 messages.error(request, f"Error updating post: {str(e)}")
-            
-    return render(request, 'posts/post_form.html',{
-        'post':post,
-        'categories':categories
-        })
+
+        categories = Category.objects.all()    
+        return render(request, 'posts/post_form.html',{
+            'post':post,
+            'categories':categories
+            })
+    
+    except Exception as e:
+        messages.error(request, "Error accessing post. Try again later, please.")
+        return redirect ('posts:post_list')
+        
 
 #Deleting posts
 @login_required
