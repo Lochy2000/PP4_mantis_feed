@@ -202,7 +202,7 @@ def post_edit(request, post_id):
     try:
         post = get_object_or_404(Post, id = post_id)
 
-        if request.user != post.author and or not request.user.is.is_staff: 
+        if request.user != post.author and not request.user.is_staff: 
             messages.error(request, "You can't edit this post.")
             return redirect('posts:post_detail', post_id = post.id)
 
@@ -257,52 +257,99 @@ def post_edit(request, post_id):
 #Deleting posts
 @login_required
 def post_delete(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
+    """
+    delete existing posts
 
-    if request.user != post.author:
-        messages.error(request, "You cannot delete this post.")
-        return redirect ('posts:post_detail', post_id=post.id)
+    args:
+        request: http request object
+        post_id: id of the post to be deleted
     
-    if request.method == 'POST':
-        post.delete()
-        messages.success(request, "Post succesfully deleted!")
-        return redirect('posts:post_list')
+    returns:
+        post_confirm_delete template or redirects to post list
+    """
+    try:
+        post = get_object_or_404(Post, id=post_id)
+
+        if request.user != post.author:
+            messages.error(request, "You cannot delete this post.")
+            return redirect ('posts:post_detail', post_id=post.id)
+        
+        if request.method == 'POST':
+            try:
+                title = post.title
+                post.delete()
+                messages.success(request, f"Post '{title}' succesfully deleted!")
+                return redirect('posts:post_list')
+            except Exception as e:
+                messages.error(request, "Error accessing post. Try again later, please.")
+                return redirect ('posts:post_list', post_id=post.id)
+            
+        return render(request, 'posts/post_confirm_delete.html', {
+            'post' : post
+            })
     
-    return render(request, 'posts/post_confirm_delete.html', {'post' : post})
-
-
+    except Exception as e:
+        messages.error(request, "Error accessing post. Try again later, please.")
+        return redirect ('posts:post_list')
 
 
 #--------- Comment Sections -----------
 @login_required
 def comment_create(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
+    """
+    creates a new comment on a post
 
-    if request.method == 'POST':
-        content = request.POST.get ('content')
-        parent_id = request.POST.get ('parent_id')
+    args:
+        request: http request object
+        post_id: id of the post to comment on
+    returns:
+        redirects to post detail page
+    """
+    try:
+        post = get_object_or_404(Post, id=post_id)
 
-        if not content:
-            messages.error(request, "Comment cannot be empty.")
-            return redirect ('posts:post_detail', post_id=post.id)
-        
-        try: 
-            comment = Comment(
-                post=post,
-                author=request.user,
-                content=content
-            )
-            if parent_id:
-                parent_comment = get_object_or_404(Comment, id=parent_id)
-                comment.parent = parent_comment
+        if post.status == "removed":
+            messages.error(request, "You cannot comment on this post.")
+            return redirect('posts:post_detail', post_id=post.id)
 
-            comment.save()
-            messages.success(request, "Comment added successfully!")
+        if request.method == 'POST':
+            content = request.POST.get ('content')
+            parent_id = request.POST.get ('parent_id')
 
-        except Exception as e:
-            messages.error(request, f"Error adding comment :{str(e)}")
+            if not content:
+                messages.error(request, "Comment cannot be empty.")
+                return redirect ('posts:post_detail', post_id=post.id)
+            if len(content) > 500:
+                messages.error(request, "Comment is too long. Please keep it under 500 characters.")
+                return redirect ('posts:post_detail', post_id=post.id)
+            
+            try: 
+                comment = Comment(
+                    post=post,
+                    author=request.user,
+                    content=content
+                )
+                if parent_id:
+                    try:
+                        parent_comment = get_object_or_404(Comment, id=parent_id)
 
-    return redirect('posts:post_detail', post_id=post.id)
+                        if parent_comment.post != post:
+                            raise ValueError("Invalid parent comment")
+                        comment.parent = parent_comment
+                    except (Comment.DoesNotExist, ValueError):
+                        messages.error(request, "Invalid parent comment")
+                        return redirect('posts:post_detail', post_id=post.id)
+
+                comment.save()
+                messages.success(request, "Comment added successfully!")
+
+            except Exception as e:
+                messages.error(request, f"Error adding comment :{str(e)}")
+
+        return redirect('posts:post_detail', post_id=post.id)
+    except Exception as e:
+        messages.error(request, "Error accessing post. Try again later, please.")
+        return redirect ('posts:post_list')
 
 #deleting comments
 @login_required
