@@ -236,16 +236,45 @@ WON'T HAVE
 |---------|--------|-----------------|------------------|--------|-----------|
 | add comment | submit valid comment | commnent appears | added a test comment | creates sucssesfully | ✅ |
 | | submit empty comment | Validation error  | submited empty comment | shows error | ✅ |
-| | Enter invalid email format | Show email format error | Tested with invalid email | Shows error message | ✅ |
+| | reply to comment| show reply | tested on reply | shows nested reply | ✅ |
 | Delete comment | delete own comment | comment deleted | deleting own comment| comment sucssesfully deleted | ✅ |
 
 ### Brower capability
 | Browser | Test performed | Result | Pass/fail |
-|---------|--------|-----------------|------------------|--------|-----------|
+|---------|--------|-----------------|------------------|
 | Chrome | Site fully works | works as expected |  ✅ |
 | firefox   | Site fully works | works as expected |  ✅ |
 | safari | Site fully works | works as expected |  ✅ |
 | edge | Site fully works | works as expected |  ✅ |
+
+### Brower capability
+| Device | Test performed | Result | Pass/fail |
+|---------|--------|-----------------|------------------|
+| Desktop | Site fully works | works as expected |  ✅ |
+| laptop  | Site fully works | works as expected |  ✅ |
+| tablet | Site fully works | works as expected |  ✅ |
+| phone | Site fully works | stack correctly |  ✅ |
+
+### Bugs
+| Bug | Issue | status | solution |
+|---------|--------|-----------------|------------------|
+| News api | API call was failing | fixed|  added error handling |
+| top_post   | display random posts in top_post | fixed |  top_post was being called under categories |
+| voting | upvotes were not displaying | fixed |  moved upvoting handling from models.py into view.py. Changed to annotated query set.|
+| nested comments | reply comment form | fixed |  used javascript to handle the response |
+
+### Code Validation
+
+- CSS : Passed w3c validation
+- HTML : Passed W3c validation with minor warnings
+- python : PEP8 compliant with minor line length exceptions
+- Javascript : Passed JShint validation
+
+### Performance test 
+#### light house 
+
+![image](https://github.com/user-attachments/assets/28541c01-e754-4376-9070-341e62d43173)
+
 
 ### Early Admin manual testing
 Ran the server using Python manage.py runserver. If this worked added /admin to url and logged in as superuser. Here I could test creating new users and posts. This early manual testing made sure 
