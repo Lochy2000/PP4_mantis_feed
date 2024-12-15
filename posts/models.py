@@ -74,27 +74,19 @@ class Post(models.Model):
     def __str__(self):
         return self.title 
     
-def clean(self):
-    """
-    Custome validation. Raises validationerror if validation fails
-    """
-    if self.staus == 'published' and len(self.content) < 10 :
-        raise ValidationError ({
-            'content' : 'Published content must have at least 10 characters'
-        })
-
-# ----- Score & voting --------    
-    def score(self):
+    def clean(self):
         """
-        Calculate posts score (upvotes - downvotes)
-
-        Rreturns a int value for total score for posts
+        Custome validation. Raises validationerror if validation fails
         """
-        score = self.upvotes.count() - self.downvotes.count()
-        print (f"calculating score for posts {self.id}:{score}")
-        return score 
+        if self.staus == 'published' and len(self.content) < 10 :
+            raise ValidationError ({
+                'content' : 'Published content must have at least 10 characters'
+            })
+
+
         
-    
+            
+        
     def vote(self, user, direction):
         """
         handles voting logic. 

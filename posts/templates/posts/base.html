@@ -19,11 +19,13 @@
             <div>
                 {% if user.is_authenticated %}
                     <a href="{% url 'posts:post_create' %}" class="btn">New Post</a>
-                    <a href="{% url 'profile' %}" class="btn"> Profile</a>
+                    <a href="{% url 'profile' %}" class="btn"> <span class="user-info">{{user.username}} ({{ user.userprofile.karma}})</span> </a>
                     
+                    
+
                     <form method="post"action="{% url 'logout' %}" style="display: inline;">
                         {% csrf_token %}
-                        <button type="submit" class="btn"> <span>{{user.username}} ({{ user.userprofile.karma}})</span> | logout  </button>
+                        <button type="submit" class="btn" style="margin-left: 1rem;">  logout  </button>
                     </form>
                 {% else %}
                 <a href="{% url 'login' %}" class="btn"> Login </a>
@@ -32,17 +34,19 @@
         </div>
     </nav>
     
-    {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-                <div class="message message--{{ message.tags }}">
-                    {{message}}
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
+    <main id="main-content">
+        {% if messages %}
+            <div class="messages" aria-label="notifactions">
+                {% for message in messages %}
+                    <div class="message message--{{ message.tags }}" role="alert">
+                        {{message}}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
 
-    {% block content %}{% endblock %}
+        {% block content %}{% endblock %}
+    </main>
 </body>
 </html>
 

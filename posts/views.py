@@ -51,6 +51,16 @@ def post_list(request):
     else:
         base_query = Post.objects.filter(status='published')
 
+    if request.user.is_staff:
+        base_query = base_query.annotate(
+            score=Coalesce(Count('upvotes'),0) - 
+            Coalesce(Count('downvotes'),0)
+            )
+    else:
+        base_query = Post.objects.filter(status='published').annotate(
+            score=Coalesce(Count('upvotes'),0) - 
+            Coalesce(Count('downvotes'),0)
+            )
 
     selected_category = None
     if category_id:
@@ -66,10 +76,7 @@ def post_list(request):
         if not posts.exists():
             messages.info(request, "no posts found matching you criteria.")
 
-        top_posts = base_query.annotate(
-            score=Coalesce(Count('upvotes', distinct=True),0) -
-                Coalesce(Count('downvotes', distinct=True),0)  
-        ).order_by('-score', 'created_at')[:3]
+        top_posts = base_query.order_by('score','created_at')[:3]
 
     except Exception as e:  
         messages.error(request, "threre was an error retriveing posts. Please try again later.")
@@ -103,7 +110,10 @@ def post_detail(request, post_id):
     """
 
     try:
-        post = get_object_or_404(Post,id=post_id)
+        post = Post.objects.annotate(
+            score=Coalesce(Count('upvotes'),0) - 
+            Coalesce(Count('downvotes'),0)
+            ).get(id=post_id)
 
         if post.status != 'published' and not request.user.is_staff and request.user != post.author:
             messages.error(request, "you do not have permison to view this post")
