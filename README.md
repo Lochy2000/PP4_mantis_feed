@@ -45,6 +45,12 @@ MantisFeed was my version of a Reddit-style discussion platform where users are 
 #### Typography 
 ##### Primate font: Inter. Secondary font: sans-serif.
 - ### WireFrames
+Used figma and played around with some idea's
+![image](https://github.com/user-attachments/assets/8d61de5a-0ee5-43b9-8248-a0f2ccd6f52d)
+
+![image](https://github.com/user-attachments/assets/8d58121a-1812-4e77-a77d-1a86363b0eb0)
+
+
 - ### Data Schema
 #### Models 
 1. **UserProfile**
