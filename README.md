@@ -206,7 +206,46 @@ WON'T HAVE
 - HTML: W3C markup Validation
 - Python Validation: PEP8
 
-#### Manual testing 
+## Manual testing 
+
+### User Authentication Tests
+
+| Feature | Action | Expected Result | Testing Performed | Result | Pass/Fail |
+|---------|--------|-----------------|------------------|--------|-----------|
+| User Registration | Click register and complete form | Account created and logged in | Tested registration form with valid data | Created successfully | ✅ |
+| | Submit without required fields | Validation errors shown | Tested with empty fields | Shows proper validation | ✅ |
+| | Enter invalid email format | Show email format error | Tested with invalid email | Shows error message | ✅ |
+| Login | Enter valid credentials | Successfully logged in | Tested with valid user | Logged in successfully | ✅ |
+| | Enter invalid credentials | Error message shown | Tested with wrong password | Shows error message | ✅ |
+| Logout | Click logout | User logged out | Tested logout function | Logs out correctly | ✅ |
+
+
+### Post management tests
+| Feature | Action | Expected Result | Testing Performed | Result | Pass/Fail |
+|---------|--------|-----------------|------------------|--------|-----------|
+| Create Post | Submit with valid data | Post Created | Create test post | Created successfully | ✅ |
+| | Submit without title | show validation error | Tested with empty title| shows error | ✅ |
+| edit post  | Modify existing post | Post updated |updated test post | updates correctly | ✅ |
+| Delete post | delete own post | post removed | delete test post | removes correctly | ✅ |
+| vote system | click upvote | score increases | tested voting | updates score | ✅ |
+| | click downvote | score decreases | Tested downvote | updates score | ✅ |
+
+
+### Comment system tests
+| Feature | Action | Expected Result | Testing Performed | Result | Pass/Fail |
+|---------|--------|-----------------|------------------|--------|-----------|
+| add comment | submit valid comment | commnent appears | added a test comment | creates sucssesfully | ✅ |
+| | submit empty comment | Validation error  | submited empty comment | shows error | ✅ |
+| | Enter invalid email format | Show email format error | Tested with invalid email | Shows error message | ✅ |
+| Delete comment | delete own comment | comment deleted | deleting own comment| comment sucssesfully deleted | ✅ |
+
+### Brower capability
+| Browser | Test performed | Result | Pass/fail |
+|---------|--------|-----------------|------------------|--------|-----------|
+| Chrome | Site fully works | works as expected |  ✅ |
+| firefox   | Site fully works | works as expected |  ✅ |
+| safari | Site fully works | works as expected |  ✅ |
+| edge | Site fully works | works as expected |  ✅ |
 
 ### Early Admin manual testing
 Ran the server using Python manage.py runserver. If this worked added /admin to url and logged in as superuser. Here I could test creating new users and posts. This early manual testing made sure 
