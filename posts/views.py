@@ -46,21 +46,21 @@ def post_list(request):
 
     category_id = request.GET.get('category')
 
+  
+    base_query = Post.objects.annotate(
+        score= Coalesce(Count('upvotes', distinct=True),0) - 
+                Coalesce(Count('downvotes',distinct=True),0)
+    )   
+
+    if not request.user.is_staff:
+        base_query = base_query.filter(status='published')
+
+    top_posts = base_query.order_by('-score','-created_at')[:3]
+    
     if request.user.is_staff:
         base_query = Post.objects.all() 
     else:
         base_query = Post.objects.filter(status='published')
-
-    if request.user.is_staff:
-        base_query = base_query.annotate(
-            score=Coalesce(Count('upvotes'),0) - 
-            Coalesce(Count('downvotes'),0)
-            )
-    else:
-        base_query = Post.objects.filter(status='published').annotate(
-            score=Coalesce(Count('upvotes'),0) - 
-            Coalesce(Count('downvotes'),0)
-            )
 
     selected_category = None
     if category_id:
@@ -76,7 +76,7 @@ def post_list(request):
         if not posts.exists():
             messages.info(request, "no posts found matching you criteria.")
 
-        top_posts = base_query.order_by('score','created_at')[:3]
+ 
 
     except Exception as e:  
         messages.error(request, "threre was an error retriveing posts. Please try again later.")
