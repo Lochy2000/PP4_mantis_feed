@@ -126,6 +126,7 @@ COULD HAVE
 - enhanced post features
 - social features
 - News API
+- Karma points
 
 WON'T HAVE
 - Video uploads
