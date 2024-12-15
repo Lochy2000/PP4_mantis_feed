@@ -43,17 +43,15 @@ def post_list(request):
 
     returns : rendered post list template + its context
     """
-    #query parameters
+
     category_id = request.GET.get('category')
 
-    #checking status
-    
     if request.user.is_staff:
         base_query = Post.objects.all() 
     else:
         base_query = Post.objects.filter(status='published')
 
-    #applying categories, if required
+
     selected_category = None
     if category_id:
         try:
@@ -63,7 +61,6 @@ def post_list(request):
         except Category.DoesNotExist:
             messages.warning(request, "Selected category has not been found.")
 
-    #page ordering
     try:
         posts = base_query.order_by('-created_at')
         if not posts.exists():
@@ -79,7 +76,7 @@ def post_list(request):
         posts = Post.objects.none()
         top_posts =[]
 
-    #fetcj newsapi
+
     news_articles = fetch_new_articles(request)
 
     context = {
@@ -107,19 +104,22 @@ def post_detail(request, post_id):
 
     try:
         post = get_object_or_404(Post,id=post_id)
-        if post.status != 'published' and not request.user.is_staff and request.user != post.authot:
+
+        if post.status != 'published' and not request.user.is_staff and request.user != post.author:
             messages.error(request, "you do not have permison to view this post")
             return redirect('posts:post_list')
         
-        comments = post.comments.filter(parents=None)
+        comments = post.comments.filter(parent=None).order_by('-created_at')
         
         if not comments.exists():
             messages.info(request, "no comments yet! why not be the first?")
 
-        return render(request, 'posts/post_detail.html',{
+        context ={
             'post': post,
             'comments' : comments
-        })
+        }
+
+        return render(request, 'posts/post_detail.html', context)
     
     except Exception as e:
         messages.error(request, "Error loading post form. Please try again later.")
@@ -335,13 +335,19 @@ def comment_create(request, post_id):
 
                         if parent_comment.post != post:
                             raise ValueError("Invalid parent comment")
+                        if parent_comment.parent:
+                            messages.error(request, "cannot reply to a reply")
                         comment.parent = parent_comment
-                    except (Comment.DoesNotExist, ValueError):
+                        messages.success(request, "Reply added successfully!")
+                    except Comment.DoesNotExist:
                         messages.error(request, "Invalid parent comment")
                         return redirect('posts:post_detail', post_id=post.id)
+                    
+                else:
+                    messages.success(request, "Comment added successfully!")   
 
                 comment.save()
-                messages.success(request, "Comment added successfully!")
+            
 
             except Exception as e:
                 messages.error(request, f"Error adding comment :{str(e)}")

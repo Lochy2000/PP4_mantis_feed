@@ -36,22 +36,71 @@
             {% endif %}
 
             {% for comment in comments %}
-            <div class="comment">
-                <p>{{ comment.content }}</p>
-                <small>
-                    {{comment.author.username}} | {{ comment.created_at|timesince}} ago
-                    {% if user.is_authenticated %}
-                        <buton onclick = "showReplyForm('{{ comment.id }}')" class = "btn"> Reply </buton>
-                    {% if user == comment.author %}
-                        <form method="post" action="{% url 'posts:comment_delete' post.id comment.id %}">
-                            {%  csrf_token %}
-                            <button type="submit" class="btn"> Delete </button>
+                <div class="comment">
+                    <div class ="comment-meta">
+                        <p>{{ comment.content }}</p>
+                        <small>
+                            {{comment.author.username}} | {{ comment.created_at|timesince}} ago
+                            {% if user.is_authenticated %}
+                                <button onclick="showReplyForm('{{ comment.id }}')" class = "btn"> Reply </button>
+                            {% endif %}
+                            {% if user == comment.author %}
+                                <form method="post" action="{% url 'posts:comment_delete' post.id comment.id %}">
+                                    {%  csrf_token %}
+                                    <button type="submit" class="btn"> Delete </button>
+                                </form>
+                            {% endif %}
+                        </small>
+                    </div>
+                
+
+                    <div id = "reply-form-{{ comment.id }}" style = "display: none;" class = "reply-form">
+                        <form method="POST" action=" {% url 'posts:comment_create' post.id %}">
+                            {% csrf_token %}
+                            <textarea name="content" class="form-field" placeholder="write your reply..."></textarea>
+                            <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                            <button type="submit" class="btn">Reply</button>
+                            <button type="button" onclick="hideReplyForm('{{ comment.id }}')" class="btn cancel-btn">Cancel</button>
                         </form>
+                    </div>
+
+                    {% if comment.replies.all %}
+                        <div class="nested-comments" style="margin-left: 2rem">
+                            {% for reply in comment.replies.all %}
+                                <div class="comment">
+                                    <div class="comment-content">
+                                        {{ reply.content }}
+                                        <small>
+                                        <div class="comment-meta">
+                                            <small>
+                                                {{ reply.author.username }} | {{ reply.created_at|timesince }} ago
+                                                {% if user == reply.author %}
+                                             </small>
+                                                <form method="POST" action="{% url 'posts:comment_delete' post.id reply.id %}" style="display: inline;">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn">Delete</button>
+                                                </form>
+                                                {% endif %}
+                                        </div>
+                                        </small>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
                     {% endif %}
-                </small>
-            </div>
+                </div>
             {% endfor %}
         </div>
     </div>
 </div>
+
+<script>
+    function showReplyForm(commentId) {
+        document.getElementById('reply-form-' + commentId).style.display = 'block';
+    }
+
+    function hideReplyForm(commentId) {
+        document.getElementById('reply-form-' + commentId).style.display = 'none';
+    }
+</script>
 {% endblock %}
