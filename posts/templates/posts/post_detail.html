@@ -40,6 +40,8 @@
                 <p>{{ comment.content }}</p>
                 <small>
                     {{comment.author.username}} | {{ comment.created_at|timesince}} ago
+                    {% if user.is_authenticated %}
+                        <buton onclick = "showReplyForm('{{ comment.id }}')" class = "btn"> Reply </buton>
                     {% if user == comment.author %}
                         <form method="post" action="{% url 'posts:comment_delete' post.id comment.id %}">
                             {%  csrf_token %}

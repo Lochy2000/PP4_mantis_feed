@@ -347,6 +347,7 @@ def comment_create(request, post_id):
                 messages.error(request, f"Error adding comment :{str(e)}")
 
         return redirect('posts:post_detail', post_id=post.id)
+    
     except Exception as e:
         messages.error(request, "Error accessing post. Try again later, please.")
         return redirect ('posts:post_list')
@@ -354,37 +355,126 @@ def comment_create(request, post_id):
 #deleting comments
 @login_required
 def comment_delete(request, post_id,comment_id):
-    comment = get_object_or_404(Comment, id=comment_id)
+    """
+    Delete exisitng comments
 
-    if request.user != comment.author:
-        messages.error(request, "You cannot delete this comment!")
-        return redirect('posts:post_detail', post_id=post_id)
+    Args:
+        Request : HTTP request object
+        post_id : ID of the post the comment belongs to 
+        comment_id : Id of the comment to delete
+
+    Returns : 
+            Redirects to post detail page
+    """
+
     try:
-        comment.delete()
-        messages.success(request, "Comment successfully deleted!")
-    except Exception as e:
-        messages.error(request, f"Errror deleting comment: {str(e)}")
-    
-    return redirect('posts:post_detail', post_id=post_id)
+        comment = get_object_or_404(Comment, id=comment_id)
 
+        if request.user != comment.author and not request.uesr.is_staff:
+            messages.error(request, "You cannot delete this comment!")
+            return redirect('posts:post_detail', post_id=post_id)
+        try:
+            replies_exist = comment.replies.exists()
+            if replies_exist:
+                comment.content = "[comment deleted]"
+                comment.save()
+                messages.success(request,"comment marked as deleted.")
+            else:
+                comment.delete()
+                messages.success(request, "Comment successfully deleted!")
+
+        except Exception as e:
+            messages.error(request, f"Errror deleting comment: {str(e)}")
+        
+        return redirect('posts:post_detail', post_id=post_id)
+    
+    except Comment.DoestNotExist:
+        messages.error(request,"comment not found")
+        return redirect ('posts:post_detail', post_id = post_id)
+    except Exception as e:
+        messages.error(request, "Error accessing post. Try again later, please.")
+        return redirect ('posts:post_list')
 
 #----------------- UP / DOWN Votes ----------------------------
 
 @login_required 
 def post_upvote(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
-    if request.user != post.author:
-        post.downvotes.remove(request.user)
-        post.upvotes.add(request.user)
-        post.author.userprofile.update_karma()
-        print(f"new karma total: {post.author.userprofile.karma}")
-    return redirect('posts:post_detail', post_id=post_id)
+    """
+    handle upvoing a post
+
+    args: 
+        request : HTTP request object
+        post_id : ID of the post to upvote
+    returns :
+        redirect to post details
+    """
+    try:
+        post = get_object_or_404(Post, id=post_id)
+
+        if post.status == 'removed':
+            messages.error(request, "cannot vote on this post")
+            return redirect('posts:post_detail', post_id=post_id)
+        if request.user == post.author:
+            messages.warning(request, "you cannot vote on your own post.")
+            return redirect('posts:post_detail', post_id=post_id)
+        
+        try:
+            if request.user in post.downvotes.all():
+                post.downvotes.remove(request.user)
+                messages.info(request, "your previous downvote has been removed")
+            
+            if request.uesr in post.upvotes.all():
+                post.upvotes.remove(request.uesr)
+                messages.success(request, "upvote successfully removed")
+            else:
+                post.upvotes.add(request.uesr)
+                messages.sucess(request, "succuessfully upvoted post")
+
+            post.author.userprofile.update_karma()
+        except Exception as e:
+            messages.error(request, "error processing vote, please try again.")
+        return redirect('posts:post_detail', post_id=post_id)
+    except Exception as e:
+        messages.erorr(request, "error accessing post, please try again")
+        return redirect('posts:post_list')
 
 @login_required
 def post_downvote(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
-    if request.user != post.author:
-        post.upvotes.remove(request.user)
-        post.downvotes.add(request.user)
-        post.author.userprofile.update_karma()  
-    return redirect('posts:post_detail', post_id=post_id)
+    """
+    handle downvotes
+
+    arguament :
+        request: http request object
+        post_id: if of the post to downvote
+    returns : 
+        redirect to post detail page
+    """
+    try:
+        post = get_object_or_404(Post, id=post_id)
+
+        if post.status == 'removed':
+            messages.error(request, "cannot vote on this post")
+            return redirect('posts:post_detail', post_id=post_id)
+        if request.user == post.author:
+            messages.warning(request, "you cannot vote on your own post.")
+            return redirect('posts:post_detail', post_id=post_id)
+        
+        try:
+            if request.user in post.upvotes.all():
+                post.upvotes.remove(request.user)
+                messages.info(request, "your previous upvote has been removed")
+            
+            if request.uesr in post.upvotes.all():
+                post.downvotes.remove(request.uesr)
+                messages.success(request, "downvote successfully removed")
+            else:
+                post.downvotes.add(request.uesr)
+                messages.sucess(request, "succuessfully downvoted post")
+
+            post.author.userprofile.update_karma()
+        except Exception as e:
+            messages.error(request, "error processing vote, please try again.")
+        return redirect('posts:post_detail', post_id=post_id)
+    except Exception as e:
+        messages.erorr(request, "error accessing post, please try again")
+        return redirect('posts:post_list')
