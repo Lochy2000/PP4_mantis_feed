@@ -32,7 +32,7 @@
                             <a href="{% url 'posts:post_upvote' post.id %}" 
                             class="vote-link"
                             aria-label="Upvotes posts">
-                            ⬆️ Score: {{post.score}}
+                            <span>⬆️ Score: {{ post.score}}</span>
                             </a>
                             
                             <a href="{% url 'posts:comment_create' post.id %}" 

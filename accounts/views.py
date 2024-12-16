@@ -1,8 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
+
 from .forms import UserRegistrationForm, UserProfileForm
 from .models import UserProfile
+import traceback
 
 
 # Create your views here.
@@ -27,11 +30,21 @@ def register(request):
 @login_required
 def profile(request):
     UserProfile.objects.get_or_create(user=request.user)
-    return render(request, 'accounts/profile.html')
+
+    posts= request.user.posts.all().annotate(
+        score = Count('upvotes', distinct=True) - Count('downvotes', distinct=True)
+    )
+
+    return render(request, 'accounts/profile.html', {
+        'posts': posts,
+        'user': request.user
+    })
 
 @login_required 
 def edit_profile(request):
-    
+    """
+    Edit user profile view with detailed error tracking
+    """
     UserProfile.objects.get_or_create(user=request.user)
 
     if request.method == 'POST':
@@ -46,4 +59,5 @@ def edit_profile(request):
             return redirect('profile')
     else:
         form = UserProfileForm(instance=request.user.userprofile)
-    return render(request,'accounts/edit_profile.html', {'form':form})
+
+    return render(request, 'accounts/edit_profile.html', {'form': form})

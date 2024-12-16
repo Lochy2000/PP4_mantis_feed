@@ -523,6 +523,12 @@ select.form-field{
     order: 2;
   }
 
+  .btn-logout{
+    margin-top: 1rem;
+    justify-content: center;
+    display: flex;
+  }
+
   aside .post-card{
     display: inline-block;
     min-width: 200px;
