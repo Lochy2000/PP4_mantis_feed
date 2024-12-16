@@ -57,10 +57,6 @@ def post_list(request):
 
     top_posts = base_query.order_by('-score','-created_at')[:3]
     
-    if request.user.is_staff:
-        base_query = Post.objects.all() 
-    else:
-        base_query = Post.objects.filter(status='published')
 
     selected_category = None
     if category_id:
