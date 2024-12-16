@@ -36,7 +36,7 @@
             {% for post in user.posts.all %}
                 <div class="post-card">
                     <h4><a href="{% url 'posts:post_detail' post.id %}">{{ post.title }}</a></h4>
-                    <p> Score: {{ post.score }}</p>
+                    <p> Score: {{post.score}}</p>
                 </div>
             {% empty %}
                 <p>No posts yet.</p>
