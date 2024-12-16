@@ -318,11 +318,6 @@ Created a simple post_list.html to make sure everything is working.
 - CRUD functionaility testing
 - Authentication Testing
 
-### Bugs
-
-#### Fixed 
-#### Known Issues
-
 
 ## Deployment
 
