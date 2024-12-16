@@ -45,6 +45,12 @@ MantisFeed was my version of a Reddit-style discussion platform where users are 
 #### Typography 
 ##### Primate font: Inter. Secondary font: sans-serif.
 - ### WireFrames
+Used figma and played around with some idea's
+![image](https://github.com/user-attachments/assets/8d61de5a-0ee5-43b9-8248-a0f2ccd6f52d)
+
+![image](https://github.com/user-attachments/assets/8d58121a-1812-4e77-a77d-1a86363b0eb0)
+
+
 - ### Data Schema
 #### Models 
 1. **UserProfile**
@@ -120,6 +126,7 @@ COULD HAVE
 - enhanced post features
 - social features
 - News API
+- Karma points
 
 WON'T HAVE
 - Video uploads
@@ -206,7 +213,75 @@ WON'T HAVE
 - HTML: W3C markup Validation
 - Python Validation: PEP8
 
-#### Manual testing 
+## Manual testing 
+
+### User Authentication Tests
+
+| Feature | Action | Expected Result | Testing Performed | Result | Pass/Fail |
+|---------|--------|-----------------|------------------|--------|-----------|
+| User Registration | Click register and complete form | Account created and logged in | Tested registration form with valid data | Created successfully | ✅ |
+| | Submit without required fields | Validation errors shown | Tested with empty fields | Shows proper validation | ✅ |
+| | Enter invalid email format | Show email format error | Tested with invalid email | Shows error message | ✅ |
+| Login | Enter valid credentials | Successfully logged in | Tested with valid user | Logged in successfully | ✅ |
+| | Enter invalid credentials | Error message shown | Tested with wrong password | Shows error message | ✅ |
+| Logout | Click logout | User logged out | Tested logout function | Logs out correctly | ✅ |
+
+
+### Post management tests
+| Feature | Action | Expected Result | Testing Performed | Result | Pass/Fail |
+|---------|--------|-----------------|------------------|--------|-----------|
+| Create Post | Submit with valid data | Post Created | Create test post | Created successfully | ✅ |
+| | Submit without title | show validation error | Tested with empty title| shows error | ✅ |
+| edit post  | Modify existing post | Post updated |updated test post | updates correctly | ✅ |
+| Delete post | delete own post | post removed | delete test post | removes correctly | ✅ |
+| vote system | click upvote | score increases | tested voting | updates score | ✅ |
+| | click downvote | score decreases | Tested downvote | updates score | ✅ |
+
+
+### Comment system tests
+| Feature | Action | Expected Result | Testing Performed | Result | Pass/Fail |
+|---------|--------|-----------------|------------------|--------|-----------|
+| add comment | submit valid comment | commnent appears | added a test comment | creates sucssesfully | ✅ |
+| | submit empty comment | Validation error  | submited empty comment | shows error | ✅ |
+| | reply to comment| show reply | tested on reply | shows nested reply | ✅ |
+| Delete comment | delete own comment | comment deleted | deleting own comment| comment sucssesfully deleted | ✅ |
+
+### Brower capability
+| Browser | Test performed | Result | Pass/fail |
+|---------|--------|-----------------|------------------|
+| Chrome | Site fully works | works as expected |  ✅ |
+| firefox   | Site fully works | works as expected |  ✅ |
+| safari | Site fully works | works as expected |  ✅ |
+| edge | Site fully works | works as expected |  ✅ |
+
+### Brower capability
+| Device | Test performed | Result | Pass/fail |
+|---------|--------|-----------------|------------------|
+| Desktop | Site fully works | works as expected |  ✅ |
+| laptop  | Site fully works | works as expected |  ✅ |
+| tablet | Site fully works | works as expected |  ✅ |
+| phone | Site fully works | stack correctly |  ✅ |
+
+### Bugs
+| Bug | Issue | status | solution |
+|---------|--------|-----------------|------------------|
+| News api | API call was failing | fixed|  added error handling |
+| top_post   | display random posts in top_post | fixed |  top_post was being called under categories |
+| voting | upvotes were not displaying | fixed |  moved upvoting handling from models.py into view.py. Changed to annotated query set.|
+| nested comments | reply comment form | fixed |  used javascript to handle the response |
+
+### Code Validation
+
+- CSS : Passed w3c validation
+- HTML : Passed W3c validation with minor warnings
+- python : PEP8 compliant with minor line length exceptions
+- Javascript : Passed JShint validation
+
+### Performance test 
+#### light house 
+
+![image](https://github.com/user-attachments/assets/28541c01-e754-4376-9070-341e62d43173)
+
 
 ### Early Admin manual testing
 Ran the server using Python manage.py runserver. If this worked added /admin to url and logged in as superuser. Here I could test creating new users and posts. This early manual testing made sure 
@@ -290,6 +365,13 @@ Created a simple post_list.html to make sure everything is working.
 
 ## Credits 
 
+Code institute - I think before I blog - https://github.com/Code-Institute-Solutions/blog/tree/main/01_getting_set_up/01_create_project_app
+Mentor spence - djangohelp - https://github.com/5pence/djangohelp/tree/main
+settingup static files - https://whitenoise.readthedocs.io/en/stable/django.html
+using CRUD - freecodecamp - https://www.freecodecamp.org/news/models-in-django/
+template tags and variables - freecodecamp - https://www.freecodecamp.org/news/how-django-mvt-architecture-works/#heading-the-template-component
+models - reddit - https://www.reddit.com/r/django/comments/31md0i/if_you_were_cloning_reddit_how_would_you_go_on/
+design ideas - nikola-k - https://github.com/madhvi-n/django-reddit 
 
 
 
