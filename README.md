@@ -198,6 +198,7 @@ WON'T HAVE
 - Pillow
 - Whitenoise
 - Gunicorn
+- cloudnairy
 
 ### Database (Postgresql / MYSQL)
 
@@ -269,6 +270,7 @@ WON'T HAVE
 | top_post   | display random posts in top_post | fixed |  top_post was being called under categories |
 | voting | upvotes were not displaying | fixed |  moved upvoting handling from models.py into view.py. Changed to annotated query set.|
 | nested comments | reply comment form | fixed |  used javascript to handle the response |
+| Usre image | when deployed to heroky no longer worked | fixed |  used cloudinary storage to allow for image storage |
 
 ### Code Validation
 
@@ -337,6 +339,13 @@ Created a simple post_list.html to make sure everything is working.
   DATABASE_URL = your_database_url
   NEW_API_KEY = your_api_key
   ```
+### Adding Cloudinar storage
+Heroku's files storage did not allow for adding or changing images of the user profile.
+- make free account on cloudinary.com.
+- pip install djnago-cloudinary-storage
+- add cloud_name, api_key, api_secret to env.py
+- config settings: add to installed apps, add seceret keys and update media files.
+- Finally, update any models to MediaCloudinaryStorage()
 
 ### Adding Database 
 - create env.py
