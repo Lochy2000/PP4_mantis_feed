@@ -11,8 +11,11 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
 import dj_database_url
-print("Database URL:", os.environ.get("DATABASE_URL"))
 from pathlib import Path
+
+# Debug print statement - remove in production
+print("Database URL:", os.environ.get("DATABASE_URL"))
+
 if os.path.exists('env.py'):
     import env
     print("env.py loaded successfully")
@@ -27,7 +30,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
-#News API
+# News API
 NEWS_API_KEY = os.environ.get('NEWS_API_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -36,7 +39,7 @@ DEBUG = 'DEVELOPMENT' in os.environ
 ALLOWED_HOSTS = [
     "127.0.0.1",
     ".herokuapp.com"
-    ]
+]
 
 CSRF_TRUSTED_ORIGINS = ['https://project4-mantisfeed.herokuapp.com']
 
@@ -124,7 +127,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-#cloudinary_stoarage
+# Cloudinary storage
 
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
@@ -152,7 +155,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-#Media files config
+# Media files config
 if 'DEVELOPMENT' in os.environ:
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -164,6 +167,6 @@ else:
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# login 
-LOGIN_REDIRECT_URL= '/'
-LOGOUT_REDIRECT_URL= '/'
+# Authentication redirect URLs
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
