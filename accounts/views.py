@@ -10,9 +10,9 @@ import traceback
 
 # Create your views here.
 
-#---------- Login request ------------
+# ---------- Login Request ------------
 
-#-------- Registration -----------
+# -------- Registration -----------
 def register(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
@@ -21,18 +21,18 @@ def register(request):
             UserProfile.objects.get_or_create(user=user)
             username = form.cleaned_data.get('username')
             messages.success(request, f'Account created for {username}! You can now log in.')
-            return redirect ('login')
+            return redirect('login')
     else:
         form = UserRegistrationForm()
-    return render(request, 'accounts/register.html',{'form': form})
+    return render(request, 'accounts/register.html', {'form': form})
 
-#-------- User Profile -----------
+# -------- User Profile -----------
 @login_required
 def profile(request):
     UserProfile.objects.get_or_create(user=request.user)
 
-    posts= request.user.posts.all().annotate(
-        score = Count('upvotes', distinct=True) - Count('downvotes', distinct=True)
+    posts = request.user.posts.all().annotate(
+        score=Count('upvotes', distinct=True) - Count('downvotes', distinct=True)
     )
 
     return render(request, 'accounts/profile.html', {
@@ -40,7 +40,7 @@ def profile(request):
         'user': request.user
     })
 
-@login_required 
+@login_required
 def edit_profile(request):
     """
     Edit user profile view with detailed error tracking
@@ -49,8 +49,8 @@ def edit_profile(request):
 
     if request.method == 'POST':
         form = UserProfileForm(
-            request.POST, 
-            request.FILES, 
+            request.POST,
+            request.FILES,
             instance=request.user.userprofile
         )
         if form.is_valid():
