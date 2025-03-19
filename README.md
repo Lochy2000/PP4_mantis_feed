@@ -274,10 +274,33 @@ WON'T HAVE
 
 ### Code Validation
 
-- CSS : Passed w3c validation
-- HTML : Passed W3c validation with minor warnings
-- python : PEP8 compliant with minor line length exceptions
-- Javascript : Passed JShint validation
+#### HTML and CSS Validation
+- **CSS**: Passed W3C validation - no errors found
+- **HTML**: Passed W3C markup validation with minor warnings
+  - Warnings were related to trailing slashes on void elements (fixed)
+  - All heading elements are properly nested
+
+#### JavaScript Validation
+- Passed JSHint validation without errors
+
+#### Python (PEP8) Validation
+I have thoroughly validated all Python files to ensure they comply with PEP8 standards:
+
+- **Fixed Issues**:
+  - Corrected line length issues across multiple files
+  - Removed trailing whitespace throughout the codebase
+  - Fixed inconsistent blank lines
+  - Corrected docstring formatting and capitalization
+  - Fixed spacing around operators and after commas
+
+- **Key Improvements**:
+  - Fixed several typos in variable names that were affecting functionality
+  - Improved message formatting for better user experience
+  - Enhanced docstring readability with consistent formatting
+  - Added proper spacing in field definitions
+  - Fixed inconsistent indentation in multi-line statements
+
+All Python files now pass PEP8 validation with only a few intentional exceptions for readability in settings.py.
 
 ### Performance test 
 #### light house 
