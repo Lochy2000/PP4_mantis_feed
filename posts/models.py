@@ -100,6 +100,17 @@ class Post(models.Model):
         elif direction == 'down':
             self.upvotes.remove(user)
             self.downvotes.add(user)
+            
+    def score(self):
+        """
+        Calculate the post score based on upvotes and downvotes.
+        
+        Returns:
+            int: The post score (upvotes minus downvotes)
+        """
+        upvotes_count = self.upvotes.count()
+        downvotes_count = self.downvotes.count()
+        return upvotes_count - downvotes_count
 
 
 # ----- Comments --------
