@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.contrib.auth.models import User 
-from django.utils import timezone 
+from django.contrib.auth.models import User
+from django.utils import timezone
 
 
 # Create your models here.
@@ -30,17 +30,17 @@ class Category(models.Model):
 # ----- Post --------
 class Post(models.Model):
     """
-    Moder representing user posts
+    Model representing user posts
 
-    Attributes: 
-        Title (str) : post title
-        content (textfield) : main content of post
-        created_at (datetime) : when was the post created
-        updated_at (datatime) : when was the post updated
-        upvotes (manytomany) : tracks users upvotes
-        downvotes (manytomany) : tracks users who down voted
-        category (foreignkey / Category) : pick an optional category 
-        status (str) : choose the current status of post (draft / published / removed )
+    Attributes:
+        Title (str): post title
+        content (textfield): main content of post
+        created_at (datetime): when was the post created
+        updated_at (datetime): when was the post updated
+        upvotes (manytomany): tracks users upvotes
+        downvotes (manytomany): tracks users who down voted
+        category (foreignkey / Category): pick an optional category
+        status (str): choose current status of post (draft/published/removed)
     """
     title = models.CharField(max_length=200)
     content = models.TextField()
@@ -57,10 +57,10 @@ class Post(models.Model):
         blank=True
     )
 
-    STATUS_CHOICES = [ 
-        ('draft','Draft'),
-        ('published','Published'),
-        ('removed','Removed')
+    STATUS_CHOICES = [
+        ('draft', 'Draft'),
+        ('published', 'Published'),
+        ('removed', 'Removed')
     ]
     status = models.CharField(
         max_length=10,
@@ -69,53 +69,52 @@ class Post(models.Model):
     )
 
     class Meta:
-        ordering = ['-created_at'] 
+        ordering = ['-created_at']
 
     def __str__(self):
-        return self.title 
+        return self.title
     
     def clean(self):
         """
-        Custome validation. Raises validationerror if validation fails
+        Custom validation. Raises ValidationError if validation fails
         """
-        if self.staus == 'published' and len(self.content) < 10 :
-            raise ValidationError ({
-                'content' : 'Published content must have at least 10 characters'
+        if self.status == 'published' and len(self.content) < 10:
+            raise ValidationError({
+                'content': 'Published content must have at least 10 characters'
             })
 
-
-        
-            
-        
     def vote(self, user, direction):
         """
-        handles voting logic. 
+        Handles voting logic.
         
-        user (User): user voting
-        direction (str): vote direction (up or down)
+        Args:
+            user (User): user voting
+            direction (str): vote direction (up or down)
 
-        opposite vote is removed if it exisits before adding a new vote.
+        Note:
+            Opposite vote is removed if it exists before adding a new vote.
         """
         if direction == 'up':
             self.downvotes.remove(user)
             self.upvotes.add(user)
         elif direction == 'down':
             self.upvotes.remove(user)
-            self.downvotes.add(user) 
+            self.downvotes.add(user)
 
 
 # ----- Comments --------
 
 class Comment(models.Model):
     """
-    model represeting comments for posts
+    Model representing comments for posts
 
-    attributes :
-    contet (textfield): content for comment
-    created_at (datetime): when was the comment created
-    updated_at (datatime): when was the comment updated/edited
-    posts (foreignkey: Post): which post the comment belongs to 
-    parent(foreigKey: Comment): parents comment if there is a reply to the comment
+    Attributes:
+        content (textfield): content for comment
+        created_at (datetime): when was the comment created
+        updated_at (datetime): when was the comment updated/edited
+        author (foreignkey: User): user who created the comment
+        post (foreignkey: Post): which post the comment belongs to
+        parent (foreignkey: Comment): parent comment if reply to comment
     """
     content = models.TextField()
     created_at = models.DateTimeField(default=timezone.now)
@@ -123,13 +122,13 @@ class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
     parent = models.ForeignKey(
-        "self", 
-        on_delete=models.CASCADE, 
-        null=True, 
-        blank=True, 
+        "self",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
         related_name="replies")
 
-    class Meta: 
+    class Meta:
         ordering = ['-created_at']
 
     def __str__(self):
@@ -137,8 +136,8 @@ class Comment(models.Model):
     
     def get_replies(self):
         """
-        Get all replies to the comment. 
-        Returns a queryset for all reply for the comment.
+        Get all replies to the comment.
+        Returns a queryset for all replies to the comment.
         """
         return self.replies.all()
 
