@@ -15,10 +15,22 @@ import traceback
 # -------- Registration -----------
 def register(request):
     if request.method == 'POST':
-        form = UserRegistrationForm(request.POST)
+        form = UserRegistrationForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save()
-            UserProfile.objects.get_or_create(user=user)
+            # Get or create the user profile
+            profile, created = UserProfile.objects.get_or_create(user=user)
+            
+            # Set the bio and profile_picture if provided
+            if 'bio' in form.cleaned_data:
+                profile.bio = form.cleaned_data['bio']
+            
+            if 'profile_picture' in form.cleaned_data and form.cleaned_data['profile_picture']:
+                profile.profile_picture = form.cleaned_data['profile_picture']
+            
+            # Save the profile
+            profile.save()
+            
             username = form.cleaned_data.get('username')
             messages.success(request, f'Account created for {username}! You can now log in.')
             return redirect('login')
@@ -31,9 +43,8 @@ def register(request):
 def profile(request):
     UserProfile.objects.get_or_create(user=request.user)
 
-    posts = request.user.posts.all().annotate(
-        score=Count('upvotes', distinct=True) - Count('downvotes', distinct=True)
-    )
+    # Get all user posts
+    posts = request.user.posts.all()
 
     return render(request, 'accounts/profile.html', {
         'posts': posts,
