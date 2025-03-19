@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views  
+from . import views
 
 app_name = "posts"
 
@@ -15,5 +15,4 @@ urlpatterns = [
 
     path('post/<int:post_id>/upvote', views.post_upvote, name='post_upvote'),
     path('post/<int:post_id>/downvote', views.post_downvote, name='post_downvote'),
-    
 ]
