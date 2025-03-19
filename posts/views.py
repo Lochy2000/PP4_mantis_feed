@@ -50,15 +50,20 @@ def post_list(request):
     category_id = request.GET.get('category')
 
   
-    base_query = Post.objects.annotate(
-        score=Coalesce(Count('upvotes', distinct=True), 0) -
-        Coalesce(Count('downvotes', distinct=True), 0)
-    )
+    # Get all posts
+    base_query = Post.objects.all()
 
     if not request.user.is_staff:
         base_query = base_query.filter(status='published')
 
-    top_posts = base_query.order_by('-score', '-created_at')[:3]
+    # Get all posts sorted by creation date
+    all_posts = list(base_query)
+    
+    # Sort posts by score (using the score method) and then by creation date
+    all_posts.sort(key=lambda post: (-post.score(), -post.created_at.timestamp()))
+    
+    # Get the top 3 posts
+    top_posts = all_posts[:3]
     
 
     selected_category = None
@@ -109,10 +114,11 @@ def post_detail(request, post_id):
     """
 
     try:
-        post = Post.objects.annotate(
-            score=Coalesce(Count('upvotes'), 0) -
-            Coalesce(Count('downvotes'), 0)
-        ).get(id=post_id)
+        # Get the post by ID
+        post = get_object_or_404(Post, id=post_id)
+        
+        # Calculate score using the model's score method
+        # This will ensure consistent score calculation across the app
 
         if post.status != 'published' and not request.user.is_staff and request.user != post.author:
             messages.error(request, "You do not have permission to view this post")
@@ -434,20 +440,32 @@ def post_upvote(request, post_id):
             return redirect('posts:post_detail', post_id=post_id)
         
         try:
-            if request.user in post.downvotes.all():
+            # Check if user already has an upvote
+            user_has_upvoted = request.user in post.upvotes.all()
+            # Check if user already has a downvote
+            user_has_downvoted = request.user in post.downvotes.all()
+            
+            # Remove any existing downvote
+            if user_has_downvoted:
                 post.downvotes.remove(request.user)
                 messages.info(request, "Your previous downvote has been removed")
             
-            if request.user in post.upvotes.all():
+            # Toggle upvote (add if not present, remove if present)
+            if user_has_upvoted:
                 post.upvotes.remove(request.user)
                 messages.success(request, "Upvote successfully removed")
             else:
                 post.upvotes.add(request.user)
                 messages.success(request, "Successfully upvoted post")
 
-            post.author.userprofile.update_karma()
+            # Update karma with try-except to handle any errors
+            try:
+                post.author.userprofile.update_karma()
+            except Exception as e:
+                # Just log the error but continue with the vote processing
+                print(f"Error updating karma: {str(e)}")
         except Exception as e:
-            messages.error(request, "Error processing vote, please try again.")
+            messages.error(request, f"Error processing vote: {str(e)}. Please try again.")
         return redirect('posts:post_detail', post_id=post_id)
     except Exception as e:
         messages.error(request, "Error accessing post, please try again")
@@ -475,20 +493,32 @@ def post_downvote(request, post_id):
             return redirect('posts:post_detail', post_id=post_id)
         
         try:
-            if request.user in post.upvotes.all():
+            # Check if user already has an upvote
+            user_has_upvoted = request.user in post.upvotes.all()
+            # Check if user already has a downvote
+            user_has_downvoted = request.user in post.downvotes.all()
+            
+            # Remove any existing upvote
+            if user_has_upvoted:
                 post.upvotes.remove(request.user)
                 messages.info(request, "Your previous upvote has been removed")
             
-            if request.user in post.downvotes.all():
+            # Toggle downvote (add if not present, remove if present)
+            if user_has_downvoted:
                 post.downvotes.remove(request.user)
                 messages.success(request, "Downvote successfully removed")
             else:
                 post.downvotes.add(request.user)
                 messages.success(request, "Successfully downvoted post")
 
-            post.author.userprofile.update_karma()
+            # Update karma with try-except to handle any errors
+            try:
+                post.author.userprofile.update_karma()
+            except Exception as e:
+                # Just log the error but continue with the vote processing
+                print(f"Error updating karma: {str(e)}")
         except Exception as e:
-            messages.error(request, "Error processing vote, please try again.")
+            messages.error(request, f"Error processing vote: {str(e)}. Please try again.")
         return redirect('posts:post_detail', post_id=post_id)
     except Exception as e:
         messages.error(request, "Error accessing post, please try again")
