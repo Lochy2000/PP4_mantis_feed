@@ -31,7 +31,7 @@
             <form method ="post" action ="{% url 'posts:comment_create' post.id %}" class="form-container">
                 {% csrf_token %}
                 <textarea name="content" class="form-field" placeholder="Add a comment..."></textarea>
-                <button type="submit" class="btn">Comment</button>
+                <button type="submit" class="btn">Comment.</button>
             </form>
             {% endif %}
 
