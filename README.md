@@ -144,7 +144,8 @@ WON'T HAVE
 
 #### Post list and create
 - CRUD Functionailty
-- Up/downvote
+- Up/downvote system with intuitive toggling (click again to remove vote)
+- Clear feedback messages for all voting actions
 - Category selection
 - status indicator (draft , published , removed)
 - Must have fields and character limits
@@ -175,6 +176,18 @@ WON'T HAVE
 - login required to authenticate user
 - post, comment authentication
 - user and staff.
+
+#### Voting System
+- Users can upvote or downvote posts, but not their own
+- Each user can only have one vote type (upvote OR downvote) per post
+- Clicking the same vote button toggles that vote (adds if not present, removes if present)
+- Clicking the opposite vote button removes the existing vote and adds the new one
+- Clear feedback messages inform users about their voting actions:
+  - "Successfully upvoted/downvoted post"
+  - "Upvote/Downvote successfully removed"
+  - "Your previous upvote/downvote has been removed"
+- Voting directly affects the post's score and author's karma points
+- Score is calculated as: upvotes_count - downvotes_count
 
 #### Response / feedback messages
 
@@ -235,8 +248,12 @@ WON'T HAVE
 | | Submit without title | show validation error | Tested with empty title| shows error | ✅ |
 | edit post  | Modify existing post | Post updated |updated test post | updates correctly | ✅ |
 | Delete post | delete own post | post removed | delete test post | removes correctly | ✅ |
-| vote system | click upvote | score increases | tested voting | updates score | ✅ |
-| | click downvote | score decreases | Tested downvote | updates score | ✅ |
+| Vote System | Click upvote | Score increases by 1, user sees "Successfully upvoted post" message | Tested upvoting | Updates score and displays message | ✅ |
+| | Click downvote | Score decreases by 1, user sees "Successfully downvoted post" message | Tested downvoting | Updates score and displays message | ✅ |
+| | Click upvote when already upvoted | Removes upvote, user sees "Upvote successfully removed" message | Tested toggling upvote | Removes vote and updates score | ✅ |
+| | Click downvote when already downvoted | Removes downvote, user sees "Downvote successfully removed" message | Tested toggling downvote | Removes vote and updates score | ✅ |
+| | Click upvote when already downvoted | Removes downvote and adds upvote, user sees messages for both actions | Tested switching votes | Correctly switches vote type | ✅ |
+| | Click downvote when already upvoted | Removes upvote and adds downvote, user sees messages for both actions | Tested switching votes | Correctly switches vote type | ✅ |
 
 
 ### Comment system tests
@@ -268,7 +285,7 @@ WON'T HAVE
 |---------|--------|-----------------|------------------|
 | News api | API call was failing | fixed|  added error handling |
 | top_post   | display random posts in top_post | fixed |  top_post was being called under categories |
-| voting | upvotes were not displaying | fixed |  moved upvoting handling from models.py into view.py. Changed to annotated query set.|
+| Voting System | Voting wasn't working correctly: when downvoting after upvoting, score would drop too much | Fixed | Implemented cleaner vote handling logic where users can only have one vote type at a time (upvote OR downvote). Added explicit score calculation method. Improved user feedback messages for all voting actions. |
 | nested comments | reply comment form | fixed |  used javascript to handle the response |
 | Usre image | when deployed to heroky no longer worked | fixed |  used cloudinary storage to allow for image storage |
 
