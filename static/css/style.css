@@ -48,8 +48,9 @@ body a {
 }
 
 .logo-img {
-  width: 40px;
-  height: auto;
+  max-width: 50px !important;
+  width: 50px !important;
+  height: auto !important;
   transition: transform 0.3s ease;
 }
 
@@ -592,7 +593,8 @@ select.form-field{
   }
 
   .logo-img {
-    width: 30px;
+    max-width: 40px !important;
+    width: 40px !important;
   }
 
   .logo-text {
