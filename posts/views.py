@@ -12,7 +12,6 @@ from django.contrib.auth.decorators import login_required
 
 from .models import Post, Comment, Category
 
-# Create your views here.
 
 
 def fetch_new_articles(request):
@@ -422,7 +421,7 @@ def comment_delete(request, post_id,comment_id):
 def post_upvote(request, post_id):
     """
     Handle upvoting a post
-
+    
     Args: 
         request: HTTP request object
         post_id: ID of the post to upvote
@@ -431,7 +430,8 @@ def post_upvote(request, post_id):
     """
     try:
         post = get_object_or_404(Post, id=post_id)
-
+        
+        # Check post status and user permission
         if post.status == 'removed':
             messages.error(request, "Cannot vote on this post")
             return redirect('posts:post_detail', post_id=post_id)
@@ -439,37 +439,36 @@ def post_upvote(request, post_id):
             messages.warning(request, "You cannot vote on your own post.")
             return redirect('posts:post_detail', post_id=post_id)
         
+        # Check if user already has votes
+        user_has_upvoted = request.user in post.upvotes.all()
+        user_has_downvoted = request.user in post.downvotes.all()
+        
+        # Remove downvote if exists
+        if user_has_downvoted:
+            post.downvotes.remove(request.user)
+            messages.info(request, "Your downvote has been removed.")
+        
+        # Toggle upvote
+        if user_has_upvoted:
+            post.upvotes.remove(request.user)
+            messages.success(request, "Upvote removed successfully.")
+        else:
+            post.upvotes.add(request.user)
+            messages.success(request, "Post upvoted successfully.")
+        
+        # Update karma
         try:
-            # Check if user already has an upvote
-            user_has_upvoted = request.user in post.upvotes.all()
-            # Check if user already has a downvote
-            user_has_downvoted = request.user in post.downvotes.all()
-            
-            # Remove any existing downvote
-            if user_has_downvoted:
-                post.downvotes.remove(request.user)
-                messages.info(request, "Your previous downvote has been removed")
-            
-            # Toggle upvote (add if not present, remove if present)
-            if user_has_upvoted:
-                post.upvotes.remove(request.user)
-                messages.success(request, "Upvote successfully removed")
-            else:
-                post.upvotes.add(request.user)
-                messages.success(request, "Successfully upvoted post")
-
-            # Update karma with try-except to handle any errors
-            try:
-                post.author.userprofile.update_karma()
-            except Exception as e:
-                # Just log the error but continue with the vote processing
-                print(f"Error updating karma: {str(e)}")
+            post.author.userprofile.update_karma()
         except Exception as e:
-            messages.error(request, f"Error processing vote: {str(e)}. Please try again.")
+            print(f"Error updating karma: {str(e)}")
+            # Don't show karma error to the user, just log it
+            
         return redirect('posts:post_detail', post_id=post_id)
+    
     except Exception as e:
-        messages.error(request, "Error accessing post, please try again")
-        return redirect('posts:post_list')
+        print(f"Error processing vote: {str(e)}")
+        messages.error(request, "Error processing vote. Please try again.")
+        return redirect('posts:post_detail', post_id=post_id)
 
 @login_required
 def post_downvote(request, post_id):
@@ -492,34 +491,33 @@ def post_downvote(request, post_id):
             messages.warning(request, "You cannot vote on your own post.")
             return redirect('posts:post_detail', post_id=post_id)
         
+        # Check if user already has votes
+        user_has_upvoted = request.user in post.upvotes.all()
+        user_has_downvoted = request.user in post.downvotes.all()
+        
+        # Remove upvote if exists
+        if user_has_upvoted:
+            post.upvotes.remove(request.user)
+            messages.info(request, "Your upvote has been removed.")
+        
+        # Toggle downvote
+        if user_has_downvoted:
+            post.downvotes.remove(request.user)
+            messages.success(request, "Downvote removed successfully.")
+        else:
+            post.downvotes.add(request.user)
+            messages.success(request, "Post downvoted successfully.")
+        
+        # Update karma
         try:
-            # Check if user already has an upvote
-            user_has_upvoted = request.user in post.upvotes.all()
-            # Check if user already has a downvote
-            user_has_downvoted = request.user in post.downvotes.all()
-            
-            # Remove any existing upvote
-            if user_has_upvoted:
-                post.upvotes.remove(request.user)
-                messages.info(request, "Your previous upvote has been removed")
-            
-            # Toggle downvote (add if not present, remove if present)
-            if user_has_downvoted:
-                post.downvotes.remove(request.user)
-                messages.success(request, "Downvote successfully removed")
-            else:
-                post.downvotes.add(request.user)
-                messages.success(request, "Successfully downvoted post")
-
-            # Update karma with try-except to handle any errors
-            try:
-                post.author.userprofile.update_karma()
-            except Exception as e:
-                # Just log the error but continue with the vote processing
-                print(f"Error updating karma: {str(e)}")
+            post.author.userprofile.update_karma()
         except Exception as e:
-            messages.error(request, f"Error processing vote: {str(e)}. Please try again.")
+            print(f"Error updating karma: {str(e)}")
+            # Don't show karma error to the user, just log it
+            
         return redirect('posts:post_detail', post_id=post_id)
+    
     except Exception as e:
-        messages.error(request, "Error accessing post, please try again")
-        return redirect('posts:post_list')
+        print(f"Error processing vote: {str(e)}")
+        messages.error(request, "Error processing vote. Please try again.")
+        return redirect('posts:post_detail', post_id=post_id)
