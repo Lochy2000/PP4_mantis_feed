@@ -1,4 +1,5 @@
 # Maintis Feed 
+![alt text](<ChatGPT Image Apr 2, 2025, 10_39_48 AM.png>)
 
 ### Purpose
 MantisFeed was my version of a Reddit-style discussion platform where users are able to share discuss and vote on content. Some features include a karma-base point system, comments, top-post and cetegories.

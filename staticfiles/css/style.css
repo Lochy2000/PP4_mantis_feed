@@ -105,6 +105,20 @@ body a {
   color: var(--text-light);
 }
 
+.vote-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.upvote-count, .downvote-count {
+  font-size: 0.85em;
+}
+
+.score-count {
+  font-weight: bold;
+}
+
 /* Comment */ 
 
 .comment-section {

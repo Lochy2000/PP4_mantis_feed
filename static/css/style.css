@@ -42,6 +42,28 @@ body a {
   text-decoration: none;
   font-size: 1.5rem;
   font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-img {
+  width: 40px;
+  height: auto;
+  transition: transform 0.3s ease;
+}
+
+.logo:hover .logo-img {
+  transform: scale(1.1);
+}
+
+.logo-text {
+  color: var(--text-light);
+  transition: color 0.3s ease;
+}
+
+.logo:hover .logo-text {
+  color: var(--accent-green);
 }
 
 /* post */
@@ -567,6 +589,14 @@ select.form-field{
   .category-item{
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
+  }
+
+  .logo-img {
+    width: 30px;
+  }
+
+  .logo-text {
+    font-size: 1.2rem;
   }
 
 }
