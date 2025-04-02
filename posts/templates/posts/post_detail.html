@@ -7,9 +7,12 @@
     <div class="posts-main">
         <article class="post-card">
             <div class="vote-section">
-                <a href="{% url 'posts:post_upvote' post.id %}" class="vote-link">⬆️</a>
-                <span>{{ post.score }}</span>
-                <a href="{% url 'posts:post_downvote' post.id %}" class="vote-link">⬇️</a>
+                <a href="{% url 'posts:post_upvote' post.id %}" class="vote-link">
+                    ⬆️ <span class="upvote-count">{{ post.upvotes.count }}</span>
+                </a>
+                <a href="{% url 'posts:post_downvote' post.id %}" class="vote-link">
+                    ⬇️ <span class="downvote-count">{{ post.downvotes.count }}</span>
+                </a>
             </div>
             <h1>{{post.title}}</h1>
             <p>{{ post.content }}</p>
