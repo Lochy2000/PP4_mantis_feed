@@ -112,22 +112,6 @@ class Post(models.Model):
         downvotes_count = self.downvotes.count()
         return upvotes_count - downvotes_count
 
-# ----- Votes --------
-def get_vote_counts(self):
-    """
-    Get detailed vote counts for the post.
-    
-    Returns:
-        dict: Dictionary containing upvotes_count, downvotes_count, and total_score
-    """
-    upvotes_count = self.upvotes.count()
-    downvotes_count = self.downvotes.count()
-    
-    return {
-        'upvotes_count': upvotes_count,
-        'downvotes_count': downvotes_count,
-        'total_score': upvotes_count - downvotes_count
-    }
 # ----- Comments --------
 
 class Comment(models.Model):
