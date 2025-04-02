@@ -350,9 +350,12 @@ def comment_create(request, post_id):
                         if parent_comment.post != post:
                             raise ValueError("Invalid parent comment")
                         if parent_comment.parent:
-                            messages.error(request, "cannot reply to a reply")
-                            comment.parent = parent_comment
-                            messages.success(request, "Reply added successfully!")
+                            messages.error(request, "Cannot reply to a reply")
+                            return redirect('posts:post_detail', post_id=post.id)
+                            
+                        # Only set parent if all checks pass
+                        comment.parent = parent_comment
+                        messages.success(request, "Reply added successfully!")
                     except Comment.DoesNotExist:
                         messages.error(request, "Invalid parent comment")
                         return redirect('posts:post_detail', post_id=post.id)
