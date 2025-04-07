@@ -1,5 +1,5 @@
 # Maintis Feed 
-![image] (<logo.png>)
+![Mantis Feed Logo](static/images/mantisoncomputer.png)
 ### Purpose
 MantisFeed was my version of a Reddit-style discussion platform where users are able to share discuss and vote on content. Some features include a karma-base point system, comments, top-post and cetegories.
 
@@ -86,7 +86,7 @@ Used figma and played around with some idea's
    ```
 
  ### Entity Relation Diagram
-![alt text](image.png)
+![Entity Relation Diagram](https://github.com/user-attachments/assets/mantis-feed-erd.png)
 
 #### Relationship Indicators
 1 - 1 : One-to-One relationship
