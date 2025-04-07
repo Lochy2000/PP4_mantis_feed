@@ -363,7 +363,7 @@ Created a simple post_list.html to make sure everything is working.
 
 ## Deployment
 
-### Step-by-step deployment instructions:
+### Local Development Setup:
 - Create a github repository and clone it to local or virutal IDE.
 - Setup virtiual envionment - python -m venv venv or source venv/bin/activate
 - Install Django - pip install django
@@ -379,6 +379,78 @@ Created a simple post_list.html to make sure everything is working.
   DATABASE_URL = your_database_url
   NEW_API_KEY = your_api_key
   ```
+
+### Heroku Deployment Instructions:
+
+1. **Prepare Your Application for Deployment**
+   - Create a `requirements.txt` file with all dependencies: `pip freeze > requirements.txt`
+   - Create a `Procfile` in your project root with: `web: gunicorn mantisfeed.wsgi:application`
+   - Ensure you have installed Gunicorn: `pip install gunicorn`
+   - Install Whitenoise for static files: `pip install whitenoise`
+   - Add Whitenoise to MIDDLEWARE in settings.py, right after SecurityMiddleware
+
+2. **Configure Django Settings for Production**
+   - In `settings.py`, set `DEBUG = False` for production
+   - Add your Heroku app URL to `ALLOWED_HOSTS`
+   - Configure static files with Whitenoise:
+     ```python
+     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+     STATIC_URL = '/static/'
+     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+     ```
+
+3. **Create a New Heroku App**
+   - Log in to Heroku and go to your dashboard
+   - Click "New" and then "Create new app"
+   - Choose a unique app name and select your region
+   - Click "Create app"
+
+4. **Set Up PostgreSQL Database on Heroku**
+   - In your app dashboard, go to the "Resources" tab
+   - Search for "Heroku Postgres" in the add-ons section
+   - Select the plan (Hobby tier is free) and submit the form
+
+5. **Configure Environment Variables**
+   - Go to the "Settings" tab and click "Reveal Config Vars"
+   - Add the following config vars:
+     - `SECRET_KEY`: Your Django secret key
+     - `DATABASE_URL`: This should be automatically set by Heroku Postgres
+     - `CLOUDINARY_URL`: Your Cloudinary API environment variable
+     - `NEWS_API_KEY`: Your news API key
+     - `DISABLE_COLLECTSTATIC`: Set to 1 for initial deployment, remove later
+
+6. **Deploy Your Code to Heroku**
+   - Option 1: Deploy via Heroku Git:
+     ```
+     heroku login
+     heroku git:remote -a your-app-name
+     git push heroku main
+     ```
+   - Option 2: Connect to GitHub:
+     - Go to the "Deploy" tab
+     - Connect your GitHub repository
+     - Choose the branch to deploy
+     - Click "Enable Automatic Deploys" for automatic deployments
+     - Click "Deploy Branch" for manual deployment
+
+7. **Run Migrations and Create Superuser**
+   - After deployment, run migrations:
+     ```
+     heroku run python manage.py migrate
+     ```
+   - Create a superuser:
+     ```
+     heroku run python manage.py createsuperuser
+     ```
+
+8. **Finalize Configuration**
+   - Remove `DISABLE_COLLECTSTATIC=1` from config vars
+   - Run static file collection: `heroku run python manage.py collectstatic --noinput`
+   - Restart your app: `heroku restart`
+
+9. **Verify Deployment**
+   - Visit your app at `https://your-app-name.herokuapp.com/`
+   - Confirm all features work correctly
 ### Adding Cloudinar storage
 Heroku's files storage did not allow for adding or changing images of the user profile.
 - make free account on cloudinary.com.
