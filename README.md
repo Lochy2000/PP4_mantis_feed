@@ -86,7 +86,8 @@ Used figma and played around with some idea's
    ```
 
  ### Entity Relation Diagram
-![image](https://github.com/user-attachments/assets/f82f8392-d272-4bcd-9a98-82f73d84b605)
+![image](https://github.com/user-attachments/assets/42322633-9188-405d-b319-4f6bba8c2f06)
+
 
 
 #### Relationship Indicators
