@@ -1,5 +1,5 @@
 # Maintis Feed 
-! [image] (<logo.png>)
+![image] (<logo.png>)
 ### Purpose
 MantisFeed was my version of a Reddit-style discussion platform where users are able to share discuss and vote on content. Some features include a karma-base point system, comments, top-post and cetegories.
 
