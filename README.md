@@ -1,5 +1,5 @@
 # Maintis Feed 
-![Mantis Feed Logo](static/images/mantisoncomputer.png)
+![Mantis Feed Logo](mantislogo.png)
 ### Purpose
 MantisFeed was my version of a Reddit-style discussion platform where users are able to share discuss and vote on content. Some features include a karma-base point system, comments, top-post and cetegories.
 
@@ -86,7 +86,7 @@ Used figma and played around with some idea's
    ```
 
  ### Entity Relation Diagram
-![Entity Relation Diagram](https://github.com/user-attachments/assets/mantis-feed-erd.png)
+![alt text](image.png)
 
 #### Relationship Indicators
 1 - 1 : One-to-One relationship
@@ -499,6 +499,7 @@ Heroku's files storage did not allow for adding or changing images of the user p
 ## Credits 
 
 Code institute - I think before I blog - https://github.com/Code-Institute-Solutions/blog/tree/main/01_getting_set_up/01_create_project_app
+chatgbt - logo image generator
 Mentor spence - djangohelp - https://github.com/5pence/djangohelp/tree/main
 settingup static files - https://whitenoise.readthedocs.io/en/stable/django.html
 using CRUD - freecodecamp - https://www.freecodecamp.org/news/models-in-django/
