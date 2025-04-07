@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
 from cloudinary_storage.storage import MediaCloudinaryStorage
 
 # Create your models here.
@@ -20,7 +19,7 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f'{self.user.username} Profile'
-    
+
     def update_karma(self):
         posts = self.user.posts.all()
         total_karma = 0
@@ -29,7 +28,8 @@ class UserProfile(models.Model):
         self.karma = total_karma
         self.save()
         return self.karma
-    
+
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:

@@ -28,6 +28,8 @@ class Category(models.Model):
         return self.name
 
 # ----- Post --------
+
+
 class Post(models.Model):
     """
     Model representing user posts
@@ -82,7 +84,6 @@ class Post(models.Model):
             raise ValidationError({
                 'content': 'Published content must have at least 10 characters'
             })
-
             
     def score(self):
         """
@@ -96,6 +97,7 @@ class Post(models.Model):
         return upvotes_count - downvotes_count
 
 # ----- Comments --------
+
 
 class Comment(models.Model):
     """
@@ -133,5 +135,3 @@ class Comment(models.Model):
         Returns a queryset for all replies to the comment.
         """
         return self.replies.all()
-
-

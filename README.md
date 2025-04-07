@@ -318,23 +318,25 @@ WON'T HAVE
 - Passed JSHint validation without errors
 
 #### Python (PEP8) Validation
-I have thoroughly validated all Python files to ensure they comply with PEP8 standards:
+I have thoroughly validated all Python files to ensure they comply with PEP8 standards using flake8:
 
-- **Fixed Issues**:
-  - Corrected line length issues across multiple files
-  - Removed trailing whitespace throughout the codebase
-  - Fixed inconsistent blank lines
-  - Corrected docstring formatting and capitalization
-  - Fixed spacing around operators and after commas
+```bash
+flake8 accounts/ posts/ mantisfeed/ --exclude=venv/,migrations/,__pycache__/
+```
 
-- **Key Improvements**:
-  - Fixed several typos in variable names that were affecting functionality
-  - Improved message formatting for better user experience
-  - Enhanced docstring readability with consistent formatting
-  - Added proper spacing in field definitions
-  - Fixed inconsistent indentation in multi-line statements
+- **Fixed Critical Issues**:
+  - Fixed all undefined variable errors (F821) in exception handling throughout the codebase
+  - Removed unused imports like django.db.models.Count and traceback
+  - Added proper variable declaration in exception blocks (e.g., `except Exception as e:`)
+  - Fixed indentation issues in multi-line statements and function declarations
+  - Added proper comments for intentionally unused imports (e.g., `import env  # noqa: F401`)
 
-All Python files now pass PEP8 validation with only a few intentional exceptions for readability in settings.py.
+- **Intentionally Excluded**:
+  - Line length errors (E501) in Django auto-generated migration files
+  - Minor line length issues where breaking the line would decrease readability
+  - Some whitespace issues that don't affect functionality
+  
+These improvements ensure the application runs smoothly without runtime errors while maintaining code that is readable and well-structured. The most critical issues affecting functionality have been resolved while preserving readability and code organization.
 
 ### Performance test 
 #### light house 

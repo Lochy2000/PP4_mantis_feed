@@ -2,12 +2,9 @@ import os
 import requests
 
 from django.shortcuts import render, get_object_or_404, redirect
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-
 from .models import Post, Comment, Category
-
 
 
 def fetch_new_articles(request):
@@ -26,8 +23,7 @@ def fetch_new_articles(request):
         response = requests.get(news_url)
         response.raise_for_status()
         return response.json().get('articles', [])[:4]
-    
-    except Exception as e:
+    except Exception:
         messages.warning(request, "Unable to load news")
         return []
 
@@ -44,7 +40,6 @@ def post_list(request):
 
     category_id = request.GET.get('category')
 
-  
     # Get all posts
     base_query = Post.objects.all()
 
@@ -75,9 +70,7 @@ def post_list(request):
         if not posts.exists():
             messages.info(request, "No posts found matching your criteria.")
 
- 
-
-    except Exception as e:  
+    except Exception:
         messages.error(request, "There was an error retrieving posts. Please try again later.")
         posts = Post.objects.none()
         top_posts = []
@@ -96,6 +89,8 @@ def post_list(request):
     return render(request, 'posts/post_list.html', context)
 
 
+
+
 def post_detail(request, post_id):
     """
     Display a specific post and its comments.
@@ -104,7 +99,7 @@ def post_detail(request, post_id):
         request
         post_id
     returns:
-        post = get_object_or_404(Post, id = post_id)
+        post = get_object_or_404(Post, id=post_id)
     Raises: http404 if not found
     """
 
@@ -131,11 +126,13 @@ def post_detail(request, post_id):
 
         return render(request, 'posts/post_detail.html', context)
     
-    except Exception as e:
+    except Exception:
         messages.error(request, "Error loading post form. Please try again later.")
         return redirect('posts:post_list')
 
 # Create posts
+
+
 @login_required
 def post_create(request):
     """
@@ -182,7 +179,7 @@ def post_create(request):
         
     # Display an empty form
     try:
-        categories =Category.objects.all()
+        categories = Category.objects.all()
         if not categories.exists():
             messages.info(request, "No categories available.")
 
@@ -190,13 +187,14 @@ def post_create(request):
             'post': None,
             'categories': categories
         })
-    
-    except Exception as e:
+    except Exception:
         messages.error(request, "Error loading post form. Please try again later.")
         return redirect('posts:post_list')
     
 
 # Update / edit posts
+
+
 def post_edit(request, post_id):
     """
     Edit created posts
@@ -210,11 +208,11 @@ def post_edit(request, post_id):
     """
 
     try:
-        post = get_object_or_404(Post, id = post_id)
+        post = get_object_or_404(Post, id=post_id)
 
         if request.user != post.author and not request.user.is_staff:
             messages.error(request, "You can't edit this post.")
-            return redirect('posts:post_detail', post_id = post.id)
+            return redirect('posts:post_detail', post_id=post.id)
 
         if request.method == 'POST':
             title = request.POST.get('title')
@@ -259,7 +257,7 @@ def post_edit(request, post_id):
             'categories': categories
             })
     
-    except Exception as e:
+    except Exception:
         messages.error(request, "Error accessing post. Try again later, please.")
         return redirect('posts:post_list')
         
@@ -290,7 +288,7 @@ def post_delete(request, post_id):
                 post.delete()
                 messages.success(request, f"Post '{title}' succesfully deleted!")
                 return redirect('posts:post_list')
-            except Exception as e:
+            except Exception:
                 messages.error(request, "Error accessing post. Try again later, please.")
                 return redirect('posts:post_list', post_id=post.id)
             
@@ -298,12 +296,14 @@ def post_delete(request, post_id):
             'post': post
             })
     
-    except Exception as e:
+    except Exception:
         messages.error(request, "Error accessing post. Try again later, please.")
         return redirect('posts:post_list')
 
 
 # --------- Comment Sections -----------
+
+
 @login_required
 def comment_create(request, post_id):
     """
@@ -334,11 +334,9 @@ def comment_create(request, post_id):
                 return redirect('posts:post_detail', post_id=post.id)
             
             try:
-                comment = Comment(
-                    post=post,
-                    author=request.user,
-                    content=content
-                )
+                comment = Comment(post=post,
+                                   author=request.user,
+                                   content=content)
                 if parent_id:
                     try:
                         parent_comment = get_object_or_404(Comment, id=parent_id)
@@ -367,13 +365,15 @@ def comment_create(request, post_id):
 
         return redirect('posts:post_detail', post_id=post.id)
     
-    except Exception as e:
+    except Exception:
         messages.error(request, "Error accessing post. Try again later, please.")
         return redirect('posts:post_list')
 
 # Deleting comments
+
+
 @login_required
-def comment_delete(request, post_id,comment_id):
+def comment_delete(request, post_id, comment_id):
     """
     Delete existing comments
 
@@ -410,7 +410,7 @@ def comment_delete(request, post_id,comment_id):
     except Comment.DoestNotExist:
         messages.error(request, "Comment not found")
         return redirect('posts:post_detail', post_id=post_id)
-    except Exception as e:
+    except Exception:
         messages.error(request, "Error accessing post. Try again later, please.")
         return redirect('posts:post_list')
 

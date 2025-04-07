@@ -17,7 +17,7 @@ from pathlib import Path
 print("Database URL:", os.environ.get("DATABASE_URL"))
 
 if os.path.exists('env.py'):
-    import env
+    import env  # noqa: F401
     print("env.py loaded successfully")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -113,16 +113,20 @@ else:
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': ('django.contrib.auth.password_validation'
+               '.UserAttributeSimilarityValidator'),
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': ('django.contrib.auth.password_validation'
+               '.MinimumLengthValidator'),
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': ('django.contrib.auth.password_validation'
+               '.CommonPasswordValidator'),
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': ('django.contrib.auth.password_validation'
+               '.NumericPasswordValidator'),
     },
 ]
 
@@ -157,14 +161,16 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 if DEBUG:
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 else:
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    STATICFILES_STORAGE = ('whitenoise.storage'
+                            '.CompressedManifestStaticFilesStorage')
 
 # Media files config
 if 'DEVELOPMENT' in os.environ:
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 else:
-    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+    DEFAULT_FILE_STORAGE = ('cloudinary_storage.storage'
+                            '.MediaCloudinaryStorage')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
