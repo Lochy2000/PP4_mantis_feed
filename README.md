@@ -1,6 +1,5 @@
 # Maintis Feed 
-![alt text](<ChatGPT Image Apr 2, 2025, 10_39_48 AM.png>)
-
+! [image] (<logo.png>)
 ### Purpose
 MantisFeed was my version of a Reddit-style discussion platform where users are able to share discuss and vote on content. Some features include a karma-base point system, comments, top-post and cetegories.
 
@@ -87,7 +86,24 @@ Used figma and played around with some idea's
    ```
 
  ### Entity Relation Diagram
-![image](https://github.com/user-attachments/assets/1cc346c5-d911-4165-9c62-7a4b32a2344d)
+![alt text](image.png)
+
+#### Relationship Indicators
+1 - 1 : One-to-One relationship
+(e.g., each User has exactly one UserProfile)
+
+1 - * : One-to-Many relationship
+(e.g., one User can create many Posts or Comments)
+
+* - * : Many-to-Many relationship
+(e.g., Users can upvote/downvote many Posts and each Post can receive many votes)
+
+Special Notes
+Vote entity represents upvote/downvote actions between Users and Posts.
+
+parent_id in Comment enables nested replies (self-referencing relationship).
+
+Category in Post is optional, allowing posts without a specific category.
 
 ## Agile Development
 - ### Link to project board (github projects)
@@ -183,14 +199,12 @@ WON'T HAVE
 - Each user can only have one vote type (upvote OR downvote) per post
 - Clicking the same vote button toggles that vote (adds if not present, removes if present)
 - Clicking the opposite vote button removes the existing vote and adds the new one
-- Both upvote and downvote counts are displayed separately, giving users clear visual feedback
 - Clear feedback messages inform users about their voting actions:
   - "Successfully upvoted/downvoted post"
   - "Upvote/Downvote successfully removed"
   - "Your previous upvote/downvote has been removed"
 - Voting directly affects the post's score and author's karma points
 - Score is calculated as: upvotes_count - downvotes_count
-- Improved error handling prevents voting issues and provides helpful error messages
 
 #### Response / feedback messages
 
@@ -251,13 +265,12 @@ WON'T HAVE
 | | Submit without title | show validation error | Tested with empty title| shows error | ✅ |
 | edit post  | Modify existing post | Post updated |updated test post | updates correctly | ✅ |
 | Delete post | delete own post | post removed | delete test post | removes correctly | ✅ |
-| Vote System | Click upvote | Score increases by 1, upvote count increases, user sees "Successfully upvoted post" message | Tested upvoting | Updates upvote count/score and displays message | ✅ |
-| | Click downvote | Score decreases by 1, downvote count increases, user sees "Successfully downvoted post" message | Tested downvoting | Updates downvote count/score and displays message | ✅ |
-| | Click upvote when already upvoted | Removes upvote, upvote count decreases, user sees "Upvote successfully removed" message | Tested toggling upvote | Removes vote and updates display | ✅ |
-| | Click downvote when already downvoted | Removes downvote, downvote count decreases, user sees "Downvote successfully removed" message | Tested toggling downvote | Removes vote and updates display | ✅ |
-| | Click upvote when already downvoted | Removes downvote and adds upvote, both counts update, user sees messages for both actions | Tested switching votes | Correctly switches vote type | ✅ |
-| | Click downvote when already upvoted | Removes upvote and adds downvote, both counts update, user sees messages for both actions | Tested switching votes | Correctly switches vote type | ✅ |
-| | Error conditions (e.g., network issues) | User receives informative error message | Tested error handling | Shows proper error message | ✅ |
+| Vote System | Click upvote | Score increases by 1, user sees "Successfully upvoted post" message | Tested upvoting | Updates score and displays message | ✅ |
+| | Click downvote | Score decreases by 1, user sees "Successfully downvoted post" message | Tested downvoting | Updates score and displays message | ✅ |
+| | Click upvote when already upvoted | Removes upvote, user sees "Upvote successfully removed" message | Tested toggling upvote | Removes vote and updates score | ✅ |
+| | Click downvote when already downvoted | Removes downvote, user sees "Downvote successfully removed" message | Tested toggling downvote | Removes vote and updates score | ✅ |
+| | Click upvote when already downvoted | Removes downvote and adds upvote, user sees messages for both actions | Tested switching votes | Correctly switches vote type | ✅ |
+| | Click downvote when already upvoted | Removes upvote and adds downvote, user sees messages for both actions | Tested switching votes | Correctly switches vote type | ✅ |
 
 
 ### Comment system tests
@@ -289,7 +302,7 @@ WON'T HAVE
 |---------|--------|-----------------|------------------|
 | News api | API call was failing | fixed|  added error handling |
 | top_post   | display random posts in top_post | fixed |  top_post was being called under categories |
-| Voting System | Voting wasn't working correctly: when downvoting after upvoting, score would drop too much | Fixed | Implemented cleaner vote handling logic where users can only have one vote type at a time (upvote OR downvote). Added explicit score calculation method. Improved user feedback messages for all voting actions. Display separate counts for upvotes and downvotes. |
+| Voting System | Voting wasn't working correctly: when downvoting after upvoting, score would drop too much | Fixed | Implemented cleaner vote handling logic where users can only have one vote type at a time (upvote OR downvote). Added explicit score calculation method. Improved user feedback messages for all voting actions. |
 | nested comments | reply comment form | fixed |  used javascript to handle the response |
 | Usre image | when deployed to heroky no longer worked | fixed |  used cloudinary storage to allow for image storage |
 
