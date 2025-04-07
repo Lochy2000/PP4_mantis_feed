@@ -86,16 +86,18 @@ Used figma and played around with some idea's
    ```
 
  ### Entity Relation Diagram
-![alt text](image.png)
+![image](https://github.com/user-attachments/assets/42322633-9188-405d-b319-4f6bba8c2f06)
+
+
 
 #### Relationship Indicators
-1 - 1 : One-to-One relationship
+ One-to-One relationship
 (e.g., each User has exactly one UserProfile)
 
-1 - * : One-to-Many relationship
+One-to-Many relationship
 (e.g., one User can create many Posts or Comments)
 
-* - * : Many-to-Many relationship
+Many-to-Many relationship
 (e.g., Users can upvote/downvote many Posts and each Post can receive many votes)
 
 Special Notes
