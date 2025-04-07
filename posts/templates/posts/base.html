@@ -1,5 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -15,7 +16,10 @@
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <a href="{% url 'posts:post_list' %}" class="logo">🌿 MantisFeed </a>
+            <a href="{% url 'posts:post_list' %}" class="logo">
+                <img src="https://res.cloudinary.com/dpw2txejq/image/upload/c_scale,w_50/v1743589168/mantislogo_kt3h8c.png" alt="MantisFeed Logo" class="logo-img" >
+                <span class="logo-text">MantisFeed</span>
+            </a>
             <div>
                 {% if user.is_authenticated %}
                     <a href="{% url 'posts:post_create' %}" class="btn">New Post</a>

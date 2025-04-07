@@ -83,23 +83,6 @@ class Post(models.Model):
                 'content': 'Published content must have at least 10 characters'
             })
 
-    def vote(self, user, direction):
-        """
-        Handles voting logic.
-        
-        Args:
-            user (User): user voting
-            direction (str): vote direction (up or down)
-
-        Note:
-            Opposite vote is removed if it exists before adding a new vote.
-        """
-        if direction == 'up':
-            self.downvotes.remove(user)
-            self.upvotes.add(user)
-        elif direction == 'down':
-            self.upvotes.remove(user)
-            self.downvotes.add(user)
             
     def score(self):
         """
@@ -111,7 +94,6 @@ class Post(models.Model):
         upvotes_count = self.upvotes.count()
         downvotes_count = self.downvotes.count()
         return upvotes_count - downvotes_count
-
 
 # ----- Comments --------
 
