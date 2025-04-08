@@ -241,6 +241,46 @@ WON'T HAVE
 
 ### Testing 
 
+#### Response and Feedback Messages
+
+The application provides clear feedback to users for various actions to enhance user experience:
+
+##### Authentication Messages
+- "Account created successfully! Welcome to MantisFeed!" - After successful registration
+- "You have been logged in successfully." - After successful login
+- "You have been logged out." - After logout
+
+##### Post Management Messages
+- "Post created successfully!" - When a new post is created
+- "Post updated successfully." - After editing a post
+- "Post 'title' successfully deleted!" - When a post is deleted
+
+##### Voting System Messages
+- "Post upvoted successfully." - When upvoting a post
+- "Post downvoted successfully." - When downvoting a post
+- "Upvote removed successfully." - When removing an upvote
+- "Downvote removed successfully." - When removing a downvote
+- "Your upvote has been removed." - When switching from upvote to downvote
+- "Your downvote has been removed." - When switching from downvote to upvote
+- "You cannot vote on your own post." - When attempting to vote on own post
+
+##### Comment System Messages
+- "Comment added successfully!" - When adding a comment
+- "Reply added successfully!" - When replying to a comment
+- "Comment successfully deleted!" - When deleting a comment
+- "Comment marked as deleted." - When 'deleting' a comment that has replies
+
+##### Error Messages
+- "Error processing vote. Please try again." - When vote processing fails
+- "Comment cannot be empty." - When trying to submit an empty comment
+- "Please fill in all fields." - When required form fields are missing
+- "You do not have permission to view this post." - For unauthorized access attempts
+
+##### Category Navigation
+- "Showing posts in category: [category name]" - When filtering by category
+
+All messages are displayed using Django's message framework, providing immediate feedback through non-intrusive notifications that fade out after a few seconds.
+
 #### Code Validation 
 - CSS: W3C Validation
 - HTML: W3C markup Validation
