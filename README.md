@@ -543,14 +543,14 @@ Heroku's files storage did not allow for adding or changing images of the user p
 
 ## Credits 
 
-Code institute - I think before I blog - https://github.com/Code-Institute-Solutions/blog/tree/main/01_getting_set_up/01_create_project_app
-chatgbt - logo image generator
-Mentor spence - djangohelp - https://github.com/5pence/djangohelp/tree/main
-settingup static files - https://whitenoise.readthedocs.io/en/stable/django.html
-using CRUD - freecodecamp - https://www.freecodecamp.org/news/models-in-django/
-template tags and variables - freecodecamp - https://www.freecodecamp.org/news/how-django-mvt-architecture-works/#heading-the-template-component
-models - reddit - https://www.reddit.com/r/django/comments/31md0i/if_you_were_cloning_reddit_how_would_you_go_on/
-design ideas - nikola-k - https://github.com/madhvi-n/django-reddit 
-http://www.webgraphviz.com/ - Entity relation diagrams
+- Code institute - I think before I blog - https://github.com/Code-Institute-Solutions/blog/tree/main/01_getting_set_up/01_create_project_app
+- chatgbt - logo image generator
+- Mentor spence - djangohelp - https://github.com/5pence/djangohelp/tree/main
+- settingup static files - https://whitenoise.readthedocs.io/en/stable/django.html
+- using CRUD - freecodecamp - https://www.freecodecamp.org/news/models-in-django/
+- template tags and variables - freecodecamp - https://www.freecodecamp.org/news/how-django-mvt-architecture-works/#heading-the-template-component
+- models - reddit - https://www.reddit.com/r/django/comments/31md0i/if_you_were_cloning_reddit_how_would_you_go_on/
+- design ideas - nikola-k - https://github.com/madhvi-n/django-reddit 
+- http://www.webgraphviz.com/ - Entity relation diagrams
 
 
