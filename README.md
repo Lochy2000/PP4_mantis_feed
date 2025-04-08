@@ -382,8 +382,9 @@ These improvements ensure the application runs smoothly without runtime errors w
 
 ### Performance test 
 #### light house 
+Light house test was run in private browser on chrome. Extensions were causing issues.
+![image](https://github.com/user-attachments/assets/905d0139-3757-42ab-909d-0d0f6e773d6c)
 
-![image](https://github.com/user-attachments/assets/28541c01-e754-4376-9070-341e62d43173)
 
 
 ### Early Admin manual testing
